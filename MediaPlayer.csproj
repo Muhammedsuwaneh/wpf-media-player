@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\Icons\Favico.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -104,6 +107,8 @@
     <Resource Include="Fonts\Lato-SemiboldItalic.ttf" />
     <Resource Include="Fonts\Lato-Thin.ttf" />
     <Resource Include="Fonts\Lato-ThinItalic.ttf" />
+    <None Include=".gitignore" />
+    <None Include="LICENSE" />
     <None Include="MockUps\MediaView.xd" />
     <None Include="MockUps\ShellView.xd" />
     <None Include="Properties\Settings.settings">
@@ -121,15 +126,30 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />
-    <Folder Include="Images\Backgrounds\" />
-    <Folder Include="Images\Gifs\" />
-    <Folder Include="Images\Icons\" />
     <Folder Include="MVVM\Helpers\" />
     <Folder Include="MVVM\Interfaces\" />
     <Folder Include="MVVM\Models\" />
     <Folder Include="MVVM\ViewModels\" />
     <Folder Include="MVVM\Views\" />
     <Folder Include="Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\Fullscreen.png" />
+    <Resource Include="Images\Icons\Help.png" />
+    <Resource Include="Images\Icons\Logo.png" />
+    <Resource Include="Images\Icons\Next.png" />
+    <Resource Include="Images\Icons\Pause.png" />
+    <Resource Include="Images\Icons\Play.png" />
+    <Resource Include="Images\Icons\Playlist.png" />
+    <Resource Include="Images\Icons\Prev.png" />
+    <Resource Include="Images\Icons\Stop.png" />
+    <Resource Include="Images\Icons\TitleBarLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Background\MediaView.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\Favico.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
