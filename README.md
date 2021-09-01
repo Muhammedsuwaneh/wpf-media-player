@@ -34,5 +34,5 @@
 
 ### Version 1.0.0
 
-### Licenced under [`MIT`](LICENSE.txt) Copyright 2021  
+### Licenced under [`MIT`](LICENSE) Copyright 2021  
 
