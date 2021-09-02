@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\Icons\Favico.ico</ApplicationIcon>
+    <ApplicationIcon>Images\Icons\Favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -151,22 +151,27 @@
     <Folder Include="MVVM\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Background\MediaView.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\Favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\Backward.png" />
+    <Resource Include="Images\Icons\Decrease.png" />
+    <Resource Include="Images\Icons\File.png" />
+    <Resource Include="Images\Icons\Forward.png" />
     <Resource Include="Images\Icons\Fullscreen.png" />
     <Resource Include="Images\Icons\Help.png" />
-    <Resource Include="Images\Icons\Logo.png" />
+    <Resource Include="Images\Icons\Increase.png" />
+    <Resource Include="Images\Icons\MultipleFiles.png" />
+    <Resource Include="Images\Icons\Mute.png" />
     <Resource Include="Images\Icons\Next.png" />
     <Resource Include="Images\Icons\Pause.png" />
     <Resource Include="Images\Icons\Play.png" />
     <Resource Include="Images\Icons\Playlist.png" />
     <Resource Include="Images\Icons\Prev.png" />
     <Resource Include="Images\Icons\Stop.png" />
-    <Resource Include="Images\Icons\TitleBarLogo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Background\MediaView.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Icons\Favico.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
