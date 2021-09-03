@@ -35,11 +35,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\Icons\Favicon.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=6.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>packages\Autofac.6.2.0\lib\netstandard2.0\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -58,6 +83,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Factory\ContainerConfig.cs" />
+    <Compile Include="Utilities\IWindowResizer.cs" />
+    <Compile Include="Utilities\WindowResizer.cs" />
     <Page Include="ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -66,6 +94,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\IObservableObject.cs" />
+    <Compile Include="Core\IRelayCommand.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="MVVM\ViewModels\MediaViewModel.cs" />
@@ -131,6 +161,7 @@
     <None Include="LICENSE" />
     <None Include="MockUps\MediaView.xd" />
     <None Include="MockUps\ShellView.xd" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -141,37 +172,33 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="MockUps\MediaView.png" />
     <Resource Include="MockUps\ShellView.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MVVM\Helpers\" />
     <Folder Include="MVVM\Models\" />
-    <Folder Include="MVVM\Utilities\" />
     <Folder Include="MVVM\Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Background\MediaView.png" />
+    <Resource Include="Assets\Backward.png" />
+    <Resource Include="Assets\Decrease.png" />
+    <Resource Include="Assets\File.png" />
+    <Resource Include="Assets\Forward.png" />
+    <Resource Include="Assets\Fullscreen.png" />
+    <Resource Include="Assets\Help.png" />
+    <Resource Include="Assets\Increase.png" />
+    <Resource Include="Assets\Logo.png" />
+    <Resource Include="Assets\MediaView.png" />
+    <Resource Include="Assets\MultipleFiles.png" />
+    <Resource Include="Assets\Mute.png" />
+    <Resource Include="Assets\Next.png" />
+    <Resource Include="Assets\Pause.png" />
+    <Resource Include="Assets\Play.png" />
+    <Resource Include="Assets\Playlist.png" />
+    <Resource Include="Assets\Prev.png" />
+    <Resource Include="Assets\Stop.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Icons\Favicon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Icons\Backward.png" />
-    <Resource Include="Images\Icons\Decrease.png" />
-    <Resource Include="Images\Icons\File.png" />
-    <Resource Include="Images\Icons\Forward.png" />
-    <Resource Include="Images\Icons\Fullscreen.png" />
-    <Resource Include="Images\Icons\Help.png" />
-    <Resource Include="Images\Icons\Increase.png" />
-    <Resource Include="Images\Icons\MultipleFiles.png" />
-    <Resource Include="Images\Icons\Mute.png" />
-    <Resource Include="Images\Icons\Next.png" />
-    <Resource Include="Images\Icons\Pause.png" />
-    <Resource Include="Images\Icons\Play.png" />
-    <Resource Include="Images\Icons\Playlist.png" />
-    <Resource Include="Images\Icons\Prev.png" />
-    <Resource Include="Images\Icons\Stop.png" />
+    <Resource Include="Assets\Favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

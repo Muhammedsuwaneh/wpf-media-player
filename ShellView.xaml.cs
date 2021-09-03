@@ -10,6 +10,8 @@ namespace MediaPlayer
         public ShellView()
         {
             InitializeComponent();
+
+            this.DataContext = new ShellViewModel(this);
         }
     }
 }

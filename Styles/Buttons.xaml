@@ -6,4 +6,19 @@
         <ResourceDictionary Source="Fonts.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <Style x:Key="WindowsControlButtonStyles" TargetType="Button">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Margin" Value="10 0 5 0" />
+        <Setter Property="Width" Value="50"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundLightBlueBrush}" />
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontFamily" Value="{StaticResource LatoRegular}" />
+    </Style>
+
+    <Style x:Key="WindowsCloseButton" TargetType="Button" BasedOn="{StaticResource WindowsControlButtonStyles}">
+        <Setter Property="Foreground" Value="Red"/>
+    </Style>
+
 </ResourceDictionary>

@@ -6,7 +6,7 @@ namespace MediaPlayer
     /// <summary>
     /// Updates UI for binding <see cref="Binding"/>
     /// </summary>
-    public class ObservableObject : INotifyPropertyChanged
+    public class ObservableObject : INotifyPropertyChanged, IObservableObject
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

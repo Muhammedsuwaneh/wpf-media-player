@@ -13,21 +13,56 @@
         Background="Transparent"
         Height="600" Width="900">
 
-    <Window.DataContext>
-        <viewModel:ShellViewModel />
-    </Window.DataContext>
+    <Border CornerRadius="{Binding WindowCornerRadius, FallbackValue=10}" Background="{StaticResource DarkBlueBackgroundBrush}">
 
-    <Border CornerRadius="20" Background="{StaticResource DarkBlueBackgroundBrush}">
-       
-        <!-- Title Bar -->
-        
-        <!-- Menu Bar -->
-        
-        <!-- Media Element -->
-        
-        <!-- Progress Bar -->
-        
-        <!-- Playback and Audio Controls -->
-        
+        <Grid>
+            <!-- Title Bar -->
+            <Grid Margin="20,15,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="200" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+
+                <!--- Logo -->
+                <Image Source="Assets/Logo.png" Width="200" Height="50"/>
+
+                <!--- Window Controls -->
+                <StackPanel Orientation="Horizontal" Grid.Column="2">
+
+                    <!--- Minimize Button -->
+                    <Button Content="_" 
+                            Style="{StaticResource WindowsControlButtonStyles}"
+                            Command="{Binding MinimizeCommand}"/>
+                    
+                    <!--- Maximize Button -->
+                    <Button Content="[  ]" 
+                            Style="{StaticResource WindowsControlButtonStyles}"
+                            Command="{Binding MaximizeCommand}"/>
+                    
+                    <!-- CLose button -->
+                    <Button Content="X" 
+                            Style="{StaticResource WindowsCloseButton}"
+                            Command="{Binding CloseWindowCommand}"/>
+
+                </StackPanel>
+
+            </Grid>
+
+            <!-- Menu Bar -->
+
+            <!-- Media Element -->
+
+            <!-- Progress Bar -->
+
+            <!-- Playback and Audio Controls -->
+        </Grid>
+
+
     </Border>
 </Window>

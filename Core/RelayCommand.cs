@@ -10,62 +10,47 @@ namespace MediaPlayer
     /// <summary>
     /// Handles all UI Commands
     /// </summary>
-    public class RelayCommand : ICommand
+    public class RelayCommand : ICommand, IRelayCommand
     {
-        #region Private Properties
-
-        private Action<object> _execute;
-
-        private Func<object, bool> _canExecute { get; set; }
-
+        #region Private Members
+        /// <summary>
+        /// The action to run 
+        /// </summary>
+        private Action mAction;
         #endregion
 
-        #region Public properties
-
+        #region Public Events 
         /// <summary>
-        /// Indicates changes in execution
+        /// The event that fires when csee cref='CanExecute(object)'/> value changes 
         /// </summary>
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-
-        #endregion
-
-        #region Public Methods
+        public event EventHandler CanExecuteChanged = (sender, e) => { };
 
         /// <summary>
-        /// Initialize commands private properties
-        /// </summary>
-        /// <param name="execute">action to be execute</param>
-        /// <param name="canExecute">run if action is to be executed</param>
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        
-        /// <summary>
-        /// Indicates if an action can be executed
+        /// A relay command can always execute 
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null || _canExecute(parameter);
+            return true;
         }
 
         /// <summary>
-        /// Executes an action 
+        /// Executes the commands action 
         /// </summary>
         /// <param name="parameter"></param>
         public void Execute(object parameter)
         {
-            _execute(parameter);
+            mAction();
         }
 
+        #endregion
+
+        #region Constructor 
+        public RelayCommand(Action action)
+        {
+            mAction = action;
+        }
         #endregion
     }
 }
