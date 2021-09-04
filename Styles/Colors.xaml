@@ -5,7 +5,7 @@
     <SolidColorBrush x:Key="DarkBlueBackgroundBrush" Color="{StaticResource DarkBlueBackground}" />
 
 
-    <Color x:Key="LightDarkBlueBackground">#112f3C</Color>
+    <Color x:Key="LightDarkBlueBackground">#67AABB</Color>
     <SolidColorBrush x:Key="LightDarkBlueBackgroundBrush" Color="{StaticResource LightDarkBlueBackground}" />
 
     <Color x:Key="DarkBackground">#000000</Color>

@@ -16,12 +16,21 @@
     <Border CornerRadius="{Binding WindowCornerRadius, FallbackValue=10}" Background="{StaticResource DarkBlueBackgroundBrush}">
 
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+
             <!-- Title Bar -->
-            <Grid Margin="20,15,0,0">
+            <Grid Grid.Row="0" Margin="20,15,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="160" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
@@ -36,17 +45,17 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="2">
 
                     <!--- Minimize Button -->
-                    <Button Content="_" 
+                    <Button Content=" _ " 
                             Style="{StaticResource WindowsControlButtonStyles}"
                             Command="{Binding MinimizeCommand}"/>
-                    
+
                     <!--- Maximize Button -->
                     <Button Content="[  ]" 
                             Style="{StaticResource WindowsControlButtonStyles}"
                             Command="{Binding MaximizeCommand}"/>
-                    
+
                     <!-- CLose button -->
-                    <Button Content="X" 
+                    <Button Content=" X " 
                             Style="{StaticResource WindowsCloseButton}"
                             Command="{Binding CloseWindowCommand}"/>
 
@@ -55,6 +64,80 @@
             </Grid>
 
             <!-- Menu Bar -->
+            <StackPanel Margin="20,0,20,0" Grid.Row="1">
+                <Menu IsMainMenu="True">
+                    <!-- Media -->
+                    <MenuItem Header="_Media" Template="{StaticResource MenuTop}">
+                        <MenuItem Header="_Open File" 
+                                  InputGestureText="Ctrl + O"
+                                  Icon="Assets/File.png"
+                                  Template="{StaticResource SubMenu}" />
+                        <MenuItem Header="_Open Multiple Files"
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/MultipleFiles.png" />
+                        <MenuItem Header="_Stream"
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/MultipleFiles.png" />
+                        <MenuItem Header="_Recently Played   >"
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/MultipleFiles.png">
+                            <MenuItem Header="_" />
+                        </MenuItem>
+                        <MenuItem Header="_Exit" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Exit.png"/>
+                    </MenuItem>
+                    <!-- Playback -->
+                    <MenuItem Header="_Playback" Template="{StaticResource MenuTop}">
+                        <MenuItem Header="_Play" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Play.png"/>
+                        <MenuItem Header="_Stop" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Stop.png" />
+                        <Separator Template="{StaticResource MenuSep}" />
+                        <MenuItem Header="_Next" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Next.png"/>
+                        <MenuItem Header="_Prev" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Prev.png"/>
+                        <MenuItem Header="_Skip Forward" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Forward.png"/>
+                        <MenuItem Header="_Rewind" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Backward.png"/>
+                    </MenuItem>
+                    <!-- Audio -->
+                    <MenuItem Header="_Audio" Template="{StaticResource MenuTop}">
+                        <MenuItem Header="_Increase Volume" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Increase.png"/>
+                        <MenuItem Header="_Decrease Volume" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Decrease.png" />
+                        <MenuItem Header="_Mute" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Mute.png"/>
+                    </MenuItem>
+                    <!-- Video -->
+                    <MenuItem Header="_Video" Template="{StaticResource MenuTop}">
+                        <MenuItem Header="_Fullscreen" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Fullscreen.png"/>
+                    </MenuItem>
+                    <!-- Help -->
+                    <MenuItem Header="_Help" Template="{StaticResource MenuTop}">
+                        <MenuItem Header="_Shortcuts" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Help.png"/>
+                        <MenuItem Header="_About" 
+                                    Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Help.png" />
+                    </MenuItem>
+                </Menu>
+            </StackPanel>
 
             <!-- Media Element -->
 
@@ -62,7 +145,5 @@
 
             <!-- Playback and Audio Controls -->
         </Grid>
-
-
     </Border>
 </Window>

@@ -78,6 +78,7 @@ namespace MediaPlayer
             // close window 
             CloseWindowCommand = new RelayCommand(() => _window.Close());
 
+            // helps in resizing window 
             var resizer = new WindowResizer(_window);
         }
     }
