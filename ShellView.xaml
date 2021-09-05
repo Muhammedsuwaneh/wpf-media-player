@@ -13,6 +13,83 @@
         Background="Transparent"
         Height="600" Width="900">
 
+    <!-- Style Menubar items -->
+    <Window.Resources>
+
+        <!--- Top level menu template style-->
+        <ControlTemplate x:Key="MenuTop" TargetType="MenuItem">
+            <StackPanel TextBlock.FontSize="15px" Height="40" TextBlock.FontFamily="{StaticResource LatoRegular}">
+
+                <!--Label, icons etc-->
+                <Label Content="{TemplateBinding Header}" Margin="5" 
+                   Foreground="{StaticResource ForegroundLightBrush}"/>
+
+                <!--- sub items-->
+                <Popup IsOpen="{TemplateBinding IsSubmenuOpen}"
+                   AllowsTransparency="True" Focusable="False">
+                    <Border BorderThickness="0" Background="{StaticResource LightDarkBlueBackgroundBrush}"
+                        BorderBrush="#e0e0e0">
+                        <StackPanel IsItemsHost="True"/>
+                    </Border>
+                </Popup>
+
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource LightDarkBlueBackgroundBrush}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+
+            </StackPanel>
+        </ControlTemplate>
+
+        <!--- Sub menu template style-->
+        <ControlTemplate x:Key="SubMenu" TargetType="MenuItem">
+            <DockPanel TextBlock.FontSize="15px" x:Name="panel" TextBlock.FontFamily="{StaticResource LatoThin}">
+
+                <!--- label, icons, etc ..-->
+                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Width="20" Margin="5" />
+
+                <Label Content="{TemplateBinding Header}" 
+                   Foreground="{StaticResource ForegroundLightBrush}" Margin="5"/>
+
+                <Label Content="{TemplateBinding InputGestureText}" FontFamily="{StaticResource LatoRegular}"
+                   Foreground="{StaticResource ForegroundLightBrush}" DockPanel.Dock="Right" Margin="5"/>
+
+                <!--- Sub items -->
+                <Popup IsOpen="{TemplateBinding IsSubmenuOpen}"
+                   AllowsTransparency="True" Focusable="False">
+                    <Border BorderThickness="0" Background="{StaticResource LightDarkBlueBackgroundBrush}"
+                        BorderBrush="#e0e0e0">
+                        <StackPanel IsItemsHost="True"/>
+                    </Border>
+                </Popup>
+            </DockPanel>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" TargetName="panel" Value="#000000"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+
+        </ControlTemplate>
+
+        <!-- style the separator -->
+        <ControlTemplate x:Key="MenuSep" TargetType="Separator">
+            <Border Height="1" Background="#E0E0E0" />
+        </ControlTemplate>
+
+        <!-- Main menu -->
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Height" Value="40px" />
+        </Style>
+
+    </Window.Resources>
+
     <Border CornerRadius="{Binding WindowCornerRadius, FallbackValue=10}" Background="{StaticResource DarkBlueBackgroundBrush}">
 
         <Grid>
@@ -66,27 +143,31 @@
             <!-- Menu Bar -->
             <StackPanel Margin="20,0,20,0" Grid.Row="1">
                 <Menu IsMainMenu="True">
+                    
                     <!-- Media -->
                     <MenuItem Header="_Media" Template="{StaticResource MenuTop}">
-                        <MenuItem Header="_Open File" 
-                                  InputGestureText="Ctrl + O"
+                        <MenuItem Header="_Open File.." 
+                                  InputGestureText="Ctrl+O"
                                   Icon="Assets/File.png"
                                   Template="{StaticResource SubMenu}" />
-                        <MenuItem Header="_Open Multiple Files"
+                        <MenuItem Header="_Open Multiple Files.."
+                                  InputGestureText="Ctrl+Shift+O"
                                   Template="{StaticResource SubMenu}"
                                   Icon="Assets/MultipleFiles.png" />
-                        <MenuItem Header="_Stream"
+                        <MenuItem Header="_Stream.."
                                   Template="{StaticResource SubMenu}"
                                   Icon="Assets/MultipleFiles.png" />
-                        <MenuItem Header="_Recently Played   >"
+                        <MenuItem Header="_Recently Played"
                                   Template="{StaticResource SubMenu}"
                                   Icon="Assets/MultipleFiles.png">
                             <MenuItem Header="_" />
                         </MenuItem>
                         <MenuItem Header="_Exit" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Exit.png"/>
+                                  Icon="Assets/Exit.png"
+                                  Command="{Binding CloseWindowCommand}"/>
                     </MenuItem>
+                    
                     <!-- Playback -->
                     <MenuItem Header="_Playback" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Play" 
@@ -109,6 +190,7 @@
                                   Template="{StaticResource SubMenu}"
                                   Icon="Assets/Backward.png"/>
                     </MenuItem>
+                    
                     <!-- Audio -->
                     <MenuItem Header="_Audio" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Increase Volume" 
@@ -121,19 +203,31 @@
                                   Template="{StaticResource SubMenu}"
                                   Icon="Assets/Mute.png"/>
                     </MenuItem>
+                    
                     <!-- Video -->
                     <MenuItem Header="_Video" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Fullscreen" 
+                                  InputGestureText="F11"
                                   Template="{StaticResource SubMenu}"
                                   Icon="Assets/Fullscreen.png"/>
                     </MenuItem>
+                    
+                    <!--- View -->
+                    <MenuItem Header="_View" Template="{StaticResource MenuTop}">
+                        <MenuItem Header="_Playlist" 
+                                  Template="{StaticResource SubMenu}"
+                                  Icon="Assets/Playlist.png"/>
+                    </MenuItem>
+                    
                     <!-- Help -->
                     <MenuItem Header="_Help" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Shortcuts" 
+                                    InputGestureText="Ctrl+H"
                                   Template="{StaticResource SubMenu}"
                                   Icon="Assets/Help.png"/>
                         <MenuItem Header="_About" 
-                                    Template="{StaticResource SubMenu}"
+                                  InputGestureText="Alt+A"
+                                  Template="{StaticResource SubMenu}"
                                   Icon="Assets/Help.png" />
                     </MenuItem>
                 </Menu>
