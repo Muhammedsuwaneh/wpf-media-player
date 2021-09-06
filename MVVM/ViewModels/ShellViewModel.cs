@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using Autofac;
+using PropertyChanged;
 
 namespace MediaPlayer
 {
@@ -62,12 +63,24 @@ namespace MediaPlayer
         public CornerRadius WindowCornerRadius { get { return new CornerRadius(WindowRadius); } }
 
         /// <summary>
+        /// the current content control view 
+        /// </summary>
+        public CurrentViewType CurrentView { get; set; } = CurrentViewType.MediaBackground;
+
+        /// <summary>
         /// ShellView Constructor
         /// </summary>
         /// <param name="window"></param>
         public ShellViewModel(Window window)
         {
             _window = window;
+
+            // listen out for window resizing 
+            _window.StateChanged += (sender, e) =>
+            {
+                OnPropertyChanged(nameof(WindowCornerRadius));
+                OnPropertyChanged(nameof(WindowRadius));
+            };
 
             // minimize window
             MinimizeCommand = new RelayCommand(() => _window.WindowState = WindowState.Minimized );

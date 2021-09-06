@@ -156,10 +156,10 @@
                                   Icon="Assets/MultipleFiles.png" />
                         <MenuItem Header="_Stream.."
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/MultipleFiles.png" />
-                        <MenuItem Header="_Recently Played"
+                                  Icon="Assets/Stream.png" />
+                        <MenuItem Header="_Recently Played Media"
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/MultipleFiles.png">
+                                  Icon="Assets/Recent.png">
                             <MenuItem Header="_" />
                         </MenuItem>
                         <MenuItem Header="_Exit" 
@@ -234,6 +234,7 @@
             </StackPanel>
 
             <!-- Media Element -->
+            <Frame Grid.Row="2" Content="{Binding CurrentView, Converter={local:ApplicationPageValueConverter}}" />
 
             <!-- Progress Bar -->
 
