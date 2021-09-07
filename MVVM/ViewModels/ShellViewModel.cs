@@ -11,6 +11,8 @@ namespace MediaPlayer
     /// </summary>
     public class ShellViewModel : ObservableObject
     {
+        private ICommand Titlebar_Click;
+
         /// <summary>
         /// Current window to be set
         /// </summary>
@@ -40,6 +42,8 @@ namespace MediaPlayer
         /// Minimizes the window 
         /// </summary>
         public ICommand MinimizeCommand { get; set; }
+
+        public ICommand DragCommand { get; set; }
 
         /// <summary>
         ///   Radius of edges around the window

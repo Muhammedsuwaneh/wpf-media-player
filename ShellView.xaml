@@ -71,7 +71,7 @@
 
             <ControlTemplate.Triggers>
                 <Trigger Property="IsHighlighted" Value="True">
-                    <Setter Property="Background" TargetName="panel" Value="#000000"/>
+                    <Setter Property="Background" TargetName="panel" Value="#212E3C"/>
                 </Trigger>
             </ControlTemplate.Triggers>
 
@@ -101,9 +101,8 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-
             <!-- Title Bar -->
-            <Grid Grid.Row="0" Margin="20,15,0,0">
+            <Grid Grid.Row="0" Margin="20,15,0,0" x:Name="Titlebar">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="*" />
@@ -116,7 +115,7 @@
                 </Grid.RowDefinitions>
 
                 <!--- Logo -->
-                <Image Source="Assets/Logo.png" Width="200" Height="50"/>
+                <Image Source="{StaticResource LogoIcon}" Width="200" Height="50"/>
 
                 <!--- Window Controls -->
                 <StackPanel Orientation="Horizontal" Grid.Column="2">
@@ -148,23 +147,23 @@
                     <MenuItem Header="_Media" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Open File.." 
                                   InputGestureText="Ctrl+O"
-                                  Icon="Assets/File.png"
+                                  Icon="{StaticResource FileIcon}"
                                   Template="{StaticResource SubMenu}" />
                         <MenuItem Header="_Open Multiple Files.."
                                   InputGestureText="Ctrl+Shift+O"
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/MultipleFiles.png" />
+                                  Icon="{StaticResource MultipleFilesIcon}" />
                         <MenuItem Header="_Stream.."
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Stream.png" />
+                                  Icon="{StaticResource StreamIcon}" />
                         <MenuItem Header="_Recently Played Media"
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Recent.png">
+                                  Icon="{StaticResource RecentIcon}">
                             <MenuItem Header="_" />
                         </MenuItem>
                         <MenuItem Header="_Exit" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Exit.png"
+                                  Icon="{StaticResource ExitIcon}"
                                   Command="{Binding CloseWindowCommand}"/>
                     </MenuItem>
                     
@@ -172,36 +171,36 @@
                     <MenuItem Header="_Playback" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Play" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Play.png"/>
+                                  Icon="{StaticResource PlayIcon}"/>
                         <MenuItem Header="_Stop" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Stop.png" />
+                                  Icon="{StaticResource StopIcon}" />
                         <Separator Template="{StaticResource MenuSep}" />
                         <MenuItem Header="_Next" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Next.png"/>
+                                  Icon="{StaticResource NextIcon}"/>
                         <MenuItem Header="_Prev" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Prev.png"/>
+                                  Icon="{StaticResource PrevIcon}"/>
                         <MenuItem Header="_Skip Forward" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Forward.png"/>
+                                  Icon="{StaticResource ForwardIcon}"/>
                         <MenuItem Header="_Rewind" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Backward.png"/>
+                                  Icon="{StaticResource BackwardIcon}"/>
                     </MenuItem>
                     
                     <!-- Audio -->
                     <MenuItem Header="_Audio" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Increase Volume" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Increase.png"/>
+                                  Icon="{StaticResource IncreaseIcon}"/>
                         <MenuItem Header="_Decrease Volume" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Decrease.png" />
+                                  Icon="{StaticResource DecreaseIcon}" />
                         <MenuItem Header="_Mute" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Mute.png"/>
+                                  Icon="{StaticResource MuteIcon}"/>
                     </MenuItem>
                     
                     <!-- Video -->
@@ -209,14 +208,14 @@
                         <MenuItem Header="_Fullscreen" 
                                   InputGestureText="F11"
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Fullscreen.png"/>
+                                  Icon="{StaticResource FullscreenIcon}"/>
                     </MenuItem>
                     
                     <!--- View -->
                     <MenuItem Header="_View" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Playlist" 
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Playlist.png"/>
+                                  Icon="{StaticResource PlaylistIcon}"/>
                     </MenuItem>
                     
                     <!-- Help -->
@@ -224,11 +223,11 @@
                         <MenuItem Header="_Shortcuts" 
                                     InputGestureText="Ctrl+H"
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Help.png"/>
+                                  Icon="{StaticResource HelpIcon}"/>
                         <MenuItem Header="_About" 
                                   InputGestureText="Alt+A"
                                   Template="{StaticResource SubMenu}"
-                                  Icon="Assets/Help.png" />
+                                  Icon="{StaticResource HelpIcon}" />
                     </MenuItem>
                 </Menu>
             </StackPanel>
@@ -237,8 +236,57 @@
             <Frame Grid.Row="2" Content="{Binding CurrentView, Converter={local:ApplicationPageValueConverter}}" />
 
             <!-- Progress Bar -->
+            <Grid Grid.Row="3" Margin="10,15,15,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                
+                <!--- Current media  progress -->
+                <TextBlock HorizontalAlignment="Left" Grid.Column="0" Text="---::---" 
+                           FontSize="{StaticResource FontSizeRegular}"
+                           Foreground="{StaticResource ForegroundLightBrush}"/>
+                
+                <!--- progress bar -->
+                <ProgressBar Grid.Column="1" Height="10" Width="auto"/>
+
+                <!--- Media length -->
+                <TextBlock HorizontalAlignment="Right" Grid.Column="2" Text="---::---"
+                           FontSize="{StaticResource FontSizeSmall}"
+                           Foreground="{StaticResource ForegroundLightBrush}"/>
+            </Grid>
 
             <!-- Playback and Audio Controls -->
+            <Grid Grid.Row="4" Margin="10,15,15,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                 
+                <!--- Info control -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock  Text="INFO CONTROL"
+                                FontSize="{StaticResource FontSizeSmall}"
+                                Foreground="{StaticResource ForegroundLightBrush}" />
+                </StackPanel>
+                
+                <!-- Playback control -->
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock  Text="PLAYBACK CONTROL"
+                                FontSize="{StaticResource FontSizeSmall}"
+                                Foreground="{StaticResource ForegroundLightBrush}" />
+                </StackPanel>
+                
+                <!--- Audio control -->
+                <StackPanel Grid.Column="2"  HorizontalAlignment="Right" > 
+                    <TextBlock
+                                Text="AUDIO CONTROL"
+                                FontSize="{StaticResource FontSizeSmall}"
+                                Foreground="{StaticResource ForegroundLightBrush}" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </Border>
 </Window>
