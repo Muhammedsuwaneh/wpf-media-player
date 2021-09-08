@@ -3,6 +3,7 @@
 
     <BitmapImage x:Key="BackwardIcon" UriSource="../Assets/Backward.png"/>
     <BitmapImage x:Key="DecreaseIcon" UriSource="../Assets/Decrease.png"/>
+    <BitmapImage x:Key="DeveloperIcon" UriSource="../Assets/Developer.png"/>
     <BitmapImage x:Key="ExitIcon" UriSource="../Assets/Exit.png"/>
     <BitmapImage x:Key="Favicon" UriSource="../Assets/Favicon.png"/>
     <BitmapImage x:Key="FileIcon" UriSource="../Assets/File.png"/>

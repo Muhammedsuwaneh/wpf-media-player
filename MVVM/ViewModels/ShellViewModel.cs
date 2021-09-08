@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Input;
-using Autofac;
-using PropertyChanged;
 
 namespace MediaPlayer
 {
@@ -11,7 +9,7 @@ namespace MediaPlayer
     /// </summary>
     public class ShellViewModel : ObservableObject
     {
-        private ICommand Titlebar_Click;
+        #region Private Properties
 
         /// <summary>
         /// Current window to be set
@@ -23,27 +21,9 @@ namespace MediaPlayer
         /// </summary>
         private int _WindowRadius { get; set; } = 20;
 
-        /// <summary>
-        /// Handles the window drag event 
-        /// </summary>
-        public ICommand WindowDragCommad { get; set; }
+        #endregion
 
-        /// <summary>
-        /// Closes the window 
-        /// </summary>
-        public ICommand CloseWindowCommand { get; set; }
-
-        /// <summary>
-        ///  Maximizes the window
-        /// </summary>
-        public ICommand MaximizeCommand { get; set; }
-
-        /// <summary>
-        /// Minimizes the window 
-        /// </summary>
-        public ICommand MinimizeCommand { get; set; }
-
-        public ICommand DragCommand { get; set; }
+        #region Public Window Properties
 
         /// <summary>
         ///   Radius of edges around the window
@@ -66,10 +46,44 @@ namespace MediaPlayer
         /// </summary>
         public CornerRadius WindowCornerRadius { get { return new CornerRadius(WindowRadius); } }
 
+
         /// <summary>
         /// the current content control view 
         /// </summary>
         public CurrentViewType CurrentView { get; set; } = CurrentViewType.MediaBackground;
+
+        #endregion
+
+        #region Commands
+
+        /// <summary>
+        /// Close window command  
+        /// </summary>
+        private ICommand CloseWindowCommand { get; set; }
+
+        /// <summary>
+        ///  Maximizes the window
+        /// </summary>
+        private ICommand MaximizeCommand { get; set; }
+
+        /// <summary>
+        /// Minimizes the window 
+        /// </summary>
+        private ICommand MinimizeCommand { get; set; }
+
+        /// <summary>
+        /// Command for dragging window 
+        /// </summary>
+        private ICommand WindowDragCommand { get; set; }
+
+        /// <summary>
+        /// Open File command 
+        /// </summary>
+        private ICommand OpenFileCommand { get; set; }
+
+        #endregion
+
+        #region Constructor 
 
         /// <summary>
         /// ShellView Constructor
@@ -86,17 +100,92 @@ namespace MediaPlayer
                 OnPropertyChanged(nameof(WindowRadius));
             };
 
-            // minimize window
-            MinimizeCommand = new RelayCommand(() => _window.WindowState = WindowState.Minimized );
-
-            // maximize window 
-            MaximizeCommand = new RelayCommand(() => _window.WindowState ^= WindowState.Maximized );
-
-            // close window 
-            CloseWindowCommand = new RelayCommand(() => _window.Close());
-
             // helps in resizing window 
             var resizer = new WindowResizer(_window);
         }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Implement window dragging 
+        /// </summary>
+        public ICommand Window_DragClick
+        {
+            get
+            {
+                return WindowDragCommand ?? (WindowDragCommand = new RelayCommand<MouseButtonEventArgs>(x =>
+                {
+                    if (x.ClickCount == 2)
+                    {
+                        _window.WindowState ^= WindowState.Maximized;
+                    }
+
+                    else _window.DragMove();
+
+                }));
+            }
+        }
+        /// <summary>
+        /// Closes the current window 
+        /// </summary>
+        public ICommand MinimizeWindow_Click
+        {
+            get
+            {
+                return MinimizeCommand ?? (MinimizeCommand = new RelayCommand<object>(x =>
+                {
+                    _window.WindowState = WindowState.Minimized;
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Closes the current window 
+        /// </summary>
+        public ICommand MaximizeWindow_Click
+        {
+            get
+            {
+                return MaximizeCommand ?? (MaximizeCommand = new RelayCommand<object>(x =>
+                {
+                    _window.WindowState ^= WindowState.Maximized;
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Closes the current window 
+        /// </summary>
+        public ICommand CloseWindow_Click
+        {
+            get
+            {
+                return CloseWindowCommand ?? (CloseWindowCommand = new RelayCommand<object>(x => 
+                {
+                      _window.Close();
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Open and read media file 
+        /// </summary>
+        public ICommand OpenFile_Click
+        {
+            get
+            {
+                return OpenFileCommand ?? (OpenFileCommand = new RelayCommand<MouseButtonEventArgs>(x =>
+                {
+                    OpenFileDialog fileDialog = new OpenFileDialog();
+
+                    fileDialog.ShowDialog();
+
+                }));
+            }
+        }
+
+        #endregion
     }
 }

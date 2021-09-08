@@ -1,19 +1,27 @@
-﻿# WPF Media Player Application
+﻿## WPF Media Player Application
 
 ## About 
 
 
 ## Prerequisites
 
-
 ## App Features
 
 
-## Technologies Used
+## Technologies/Dependencies used
+
+- C#
+- .Net Framework
+- WPF 
+- Xaml
+- MVVM Light
+- Xunit
+- Autofac 
+- Fody Weavers 
 
 ## User Manual 
 
-### Keyboard Shortcuts
+## Keyboard Shortcuts
 
 ### Media: 
 
@@ -28,11 +36,11 @@
 ### Main Screen
 
 ## Contributors
+Muhammed Suwaneh, Venus Tech
 
-- Muhammed Suwaneh, Venus Tech
+## Version 
+1.0.0
 
-
-### Version 1.0.0
-
-### Licenced under [`MIT`](LICENSE) Copyright 2021  
+## Licenced 
+Under [`MIT`](LICENSE) Copyright 2021  
 

@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:local="clr-namespace:MediaPlayer"
         xmlns:viewModel="clr-namespace:MediaPlayer"
         mc:Ignorable="d"
@@ -102,11 +104,14 @@
             </Grid.RowDefinitions>
 
             <!-- Title Bar -->
-            <Grid Grid.Row="0" Margin="20,15,0,0" x:Name="Titlebar">
+            <Grid Grid.Row="0" Margin="20,15,0,0">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="160" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="150" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
@@ -115,25 +120,76 @@
                 </Grid.RowDefinitions>
 
                 <!--- Logo -->
-                <Image Source="{StaticResource LogoIcon}" Width="200" Height="50"/>
+                <Border Grid.Column="0" Width="200" Height="50" HorizontalAlignment="Left">
+                    <Border.Background>
+                        <ImageBrush Stretch="Uniform" ImageSource="{StaticResource LogoIcon}" />
+                    </Border.Background>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <command:EventToCommand Command="{Binding Window_DragClick}"
+                                                    PassEventArgsToCommand="True"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Border>
+                
+                <!--- Empty draggable border-->
+                <Border Grid.Column="1">
+                    <Border.Background>
+                        <SolidColorBrush Color="{StaticResource DarkBlueBackground}" />
+                    </Border.Background>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <command:EventToCommand Command="{Binding Window_DragClick}" 
+                                                    PassEventArgsToCommand="True"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Border>
+
+                <!--- Developer -->
+                <Border Grid.Column="2" Width="200" HorizontalAlignment="Left">
+                    <Border.Background>
+                        <ImageBrush Stretch="Uniform" ImageSource="{StaticResource DeveloperIcon}" />
+                    </Border.Background>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <command:EventToCommand Command="{Binding Window_DragClick}" 
+                                                    PassEventArgsToCommand="True"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Border>
+
+                <!--- Empty draggable border-->
+                <Border Grid.Column="3">
+                    <Border.Background>
+                        <SolidColorBrush Color="{StaticResource DarkBlueBackground}" />
+                    </Border.Background>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <command:EventToCommand Command="{Binding Window_DragClick}" 
+                                                    PassEventArgsToCommand="True"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Border>
 
                 <!--- Window Controls -->
-                <StackPanel Orientation="Horizontal" Grid.Column="2">
+                <StackPanel Orientation="Horizontal"
+                            Margin="0 0 0 10"
+                            Grid.Column="4" HorizontalAlignment="Center">
 
                     <!--- Minimize Button -->
                     <Button Content=" _ " 
                             Style="{StaticResource WindowsControlButtonStyles}"
-                            Command="{Binding MinimizeCommand}"/>
+                            Command="{Binding MinimizeWindow_Click}"/>
 
                     <!--- Maximize Button -->
                     <Button Content="[  ]" 
                             Style="{StaticResource WindowsControlButtonStyles}"
-                            Command="{Binding MaximizeCommand}"/>
+                            Command="{Binding MaximizeWindow_Click}"/>
 
                     <!-- CLose button -->
                     <Button Content=" X " 
                             Style="{StaticResource WindowsCloseButton}"
-                            Command="{Binding CloseWindowCommand}"/>
+                            Command="{Binding CloseWindow_Click}"/>
 
                 </StackPanel>
 
@@ -147,6 +203,7 @@
                     <MenuItem Header="_Media" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Open File.." 
                                   InputGestureText="Ctrl+O"
+                                  Command="{Binding OpenFile_Click}"
                                   Icon="{StaticResource FileIcon}"
                                   Template="{StaticResource SubMenu}" />
                         <MenuItem Header="_Open Multiple Files.."
@@ -164,7 +221,7 @@
                         <MenuItem Header="_Exit" 
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource ExitIcon}"
-                                  Command="{Binding CloseWindowCommand}"/>
+                                  Command="{Binding CloseWindow_Click}"/>
                     </MenuItem>
                     
                     <!-- Playback -->
@@ -267,14 +324,14 @@
                  
                 <!--- Info control -->
                 <StackPanel Grid.Column="0">
-                    <TextBlock  Text="INFO CONTROL"
+                    <TextBlock  Text="INFO CONTROLS"
                                 FontSize="{StaticResource FontSizeSmall}"
                                 Foreground="{StaticResource ForegroundLightBrush}" />
                 </StackPanel>
                 
                 <!-- Playback control -->
                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                    <TextBlock  Text="PLAYBACK CONTROL"
+                    <TextBlock  Text="PLAYBACK CONTROLS"
                                 FontSize="{StaticResource FontSizeSmall}"
                                 Foreground="{StaticResource ForegroundLightBrush}" />
                 </StackPanel>
@@ -282,7 +339,7 @@
                 <!--- Audio control -->
                 <StackPanel Grid.Column="2"  HorizontalAlignment="Right" > 
                     <TextBlock
-                                Text="AUDIO CONTROL"
+                                Text="AUDIO CONTROLS"
                                 FontSize="{StaticResource FontSizeSmall}"
                                 Foreground="{StaticResource ForegroundLightBrush}" />
                 </StackPanel>
