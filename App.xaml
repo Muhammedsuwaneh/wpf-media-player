@@ -12,7 +12,7 @@
         <ResourceDictionary Source="Styles/Texts.xaml">
         </ResourceDictionary>
         <ResourceDictionary Source="Styles/ImageResources.xaml">
-          <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:MediaPlayer.ViewModel" />
+          <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:MediaPlayer" />
         </ResourceDictionary>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>

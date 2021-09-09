@@ -16,7 +16,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using CommonServiceLocator;
 
-namespace MediaPlayer.ViewModel
+namespace MediaPlayer
 {
     /// <summary>
     /// This class contains static references to all the view models in the

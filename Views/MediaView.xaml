@@ -5,9 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MediaPlayer"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="900"
       Title="MediaView">
-    <TextBlock Text="MEDIA PLAYER" 
-               Foreground="{StaticResource ForegroundLightBrush}"
-               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    <Grid Background="#000">
+        <ContentControl Content="{Binding MediaElementObject}" />
+    </Grid>
 </local:BaseView>

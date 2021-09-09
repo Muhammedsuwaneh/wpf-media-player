@@ -1,6 +1,6 @@
 using GalaSoft.MvvmLight;
 
-namespace MediaPlayer.ViewModel
+namespace MediaPlayer
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.

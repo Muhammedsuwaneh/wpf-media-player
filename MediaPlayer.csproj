@@ -104,16 +104,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\IObservableObject.cs" />
+    <Compile Include="Data\DataAccess.cs" />
     <Compile Include="EventHandlers\EventArgs.cs" />
     <Compile Include="EventHandlers\EventRaiser.cs" />
     <Compile Include="EventHandlers\IRelayCommand.cs" />
     <Compile Include="Factory\ContainerConfig.cs" />
-    <Compile Include="MVVM\ViewModels\MediaBackgroundModelView.cs" />
-    <Compile Include="MVVM\Views\Base\BaseView.cs" />
-    <Compile Include="MVVM\Views\MediaBackgroundView.xaml.cs">
+    <Compile Include="ViewModel\MediaBackgroundModelView.cs" />
+    <Compile Include="Views\Base\BaseView.cs" />
+    <Compile Include="Views\MediaBackgroundView.xaml.cs">
       <DependentUpon>MediaBackgroundView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MVVM\Views\MediaView.xaml.cs">
+    <Compile Include="Views\MediaView.xaml.cs">
       <DependentUpon>MediaView.xaml</DependentUpon>
     </Compile>
     <Compile Include="NavigationTypes\CurrentViewType.cs" />
@@ -123,11 +125,11 @@
     <Compile Include="ValueConverters\BaseValueConverters.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Page Include="MVVM\Views\MediaBackgroundView.xaml">
+    <Page Include="Views\MediaBackgroundView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\Views\MediaView.xaml">
+    <Page Include="Views\MediaView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -139,11 +141,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\IObservableObject.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="EventHandlers\RelayCommand.cs" />
-    <Compile Include="MVVM\ViewModels\MediaViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModel\MediaViewModel.cs" />
+    <Compile Include="ViewModel\ShellViewModel.cs" />
     <Compile Include="ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -226,7 +227,8 @@
     <Resource Include="MockUps\ShellView.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MVVM\Models\" />
+    <Folder Include="Models\" />
+    <Folder Include="UnitTest\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Backward.png" />

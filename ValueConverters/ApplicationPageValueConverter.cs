@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Windows;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using System.Diagnostics;
 
@@ -23,8 +20,10 @@ namespace MediaPlayer
         {
             switch((CurrentViewType)value)
             {
+                // load media 
                 case CurrentViewType.Media:
                     return new MediaView();
+                // load medi background 
                 case CurrentViewType.MediaBackground:
                     return new MediaBackgroundView();
                 default:

@@ -1,6 +1,9 @@
 ﻿using Microsoft.Win32;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Linq;
+using System.IO;
 
 namespace MediaPlayer
 {
@@ -16,10 +19,35 @@ namespace MediaPlayer
         /// </summary>
         private Window _window { get; set; }
 
+        private static string[] SupportedFileTypes = new string[]
+        {
+            ".mp3",
+            ".mpg",
+            ".mpeg",
+            ".mp4",
+            ".ts",
+            ".mkv",
+        };
+
+        /// <summary>
+        /// Current media path
+        /// </summary>
+        private string MediaPath { get; set; }
+
+        /// <summary>
+        /// Store current media path for future use 
+        /// </summary>
+        private string CurrentMediaPath { get; set; }
+
         /// <summary>
         /// Sets the window radius 
         /// </summary>
         private int _WindowRadius { get; set; } = 20;
+
+        /// <summary>
+        /// Selected Media File Path
+        /// </summary>
+        public string MediaFilePath { get; set; } = string.Empty;
 
         #endregion
 
@@ -178,12 +206,77 @@ namespace MediaPlayer
             {
                 return OpenFileCommand ?? (OpenFileCommand = new RelayCommand<MouseButtonEventArgs>(x =>
                 {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
+                    if (GetMediaFile())
+                    {
+                        // reference media properties 
+                        MediaViewModel.MediaPath = CurrentMediaPath;
 
-                    fileDialog.ShowDialog();
+                        // Switch to media view 
+                        CurrentView = CurrentViewType.Media;
+                    }
 
                 }));
             }
+        }
+
+        #endregion
+
+
+        #region Helpers 
+    
+        private bool GetMediaFile()
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+
+            fileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg;*.mp4;*.ts;*.mkv)|*.mp3;*.mpg;*.mpeg;*.mp4;*.ts;*.mkv";
+
+            if (fileDialog.ShowDialog() == true)
+            {
+                string fileName = fileDialog.FileName;
+
+                if (CheckForEmptyFilePaths(fileName) == true)
+                {
+                    // display error window 
+                    MessageBox.Show("No file selected");
+                    return false;
+                }
+
+                // check if file type is supported 
+                if (CheckForUnsupportedFileTypes(fileName) == false)
+                {
+                    // display error window 
+                    MessageBox.Show("Selected File type is not supported");
+                    return false;
+                }
+
+                else
+                {
+                    CurrentMediaPath = fileName;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// checks if current selected file is an empty file or not
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool CheckForEmptyFilePaths(string file)
+        {
+            return string.IsNullOrEmpty(file);
+        }
+
+        /// <summary>
+        /// Check for unsupported file types 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static bool CheckForUnsupportedFileTypes(string file)
+        {
+            return SupportedFileTypes.Contains(Path.GetExtension(file));
         }
 
         #endregion

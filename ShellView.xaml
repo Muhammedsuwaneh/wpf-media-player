@@ -99,19 +99,19 @@
                 <RowDefinition Height="70"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
             <!-- Title Bar -->
             <Grid Grid.Row="0" Margin="20,15,0,0">
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="170" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
@@ -120,7 +120,7 @@
                 </Grid.RowDefinitions>
 
                 <!--- Logo -->
-                <Border Grid.Column="0" Width="200" Height="50" HorizontalAlignment="Left">
+                <Border Grid.Column="0" Width="150" Height="50" HorizontalAlignment="Left">
                     <Border.Background>
                         <ImageBrush Stretch="Uniform" ImageSource="{StaticResource LogoIcon}" />
                     </Border.Background>
@@ -146,7 +146,7 @@
                 </Border>
 
                 <!--- Developer -->
-                <Border Grid.Column="2" Width="200" HorizontalAlignment="Left">
+                <Border Grid.Column="2" Width="170" HorizontalAlignment="Left">
                     <Border.Background>
                         <ImageBrush Stretch="Uniform" ImageSource="{StaticResource DeveloperIcon}" />
                     </Border.Background>
@@ -186,8 +186,8 @@
                             Style="{StaticResource WindowsControlButtonStyles}"
                             Command="{Binding MaximizeWindow_Click}"/>
 
-                    <!-- CLose button -->
-                    <Button Content=" X " 
+                    <!-- Close button -->
+                    <Button Content=" X "
                             Style="{StaticResource WindowsCloseButton}"
                             Command="{Binding CloseWindow_Click}"/>
 
@@ -290,7 +290,7 @@
             </StackPanel>
 
             <!-- Media Element -->
-            <Frame Grid.Row="2" Content="{Binding CurrentView, Converter={local:ApplicationPageValueConverter}}" />
+            <Frame NavigationUIVisibility="Hidden" Grid.Row="2" Content="{Binding CurrentView, Converter={local:ApplicationPageValueConverter}}" />
 
             <!-- Progress Bar -->
             <Grid Grid.Row="3" Margin="10,15,15,10">
