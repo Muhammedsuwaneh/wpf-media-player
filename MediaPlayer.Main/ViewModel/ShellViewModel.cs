@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Linq;
 using System.IO;
+using System;
 
 namespace MediaPlayer
 {
@@ -37,7 +38,7 @@ namespace MediaPlayer
         /// <summary>
         /// Store current media path for future use 
         /// </summary>
-        private string CurrentMediaPath { get; set; }
+        private Uri CurrentMediaPath { get; set; }
 
         /// <summary>
         /// Sets the window radius 
@@ -145,12 +146,10 @@ namespace MediaPlayer
             {
                 return WindowDragCommand ?? (WindowDragCommand = new RelayCommand<MouseButtonEventArgs>(x =>
                 {
-                    if (x.ClickCount == 2)
-                    {
+                    if(x.ClickCount == 2)
                         _window.WindowState ^= WindowState.Maximized;
-                    }
-
-                    else _window.DragMove();
+                    else 
+                        _window.DragMove();
 
                 }));
             }
@@ -208,8 +207,8 @@ namespace MediaPlayer
                 {
                     if (GetMediaFile())
                     {
-                        // reference media properties 
-                        MediaViewModel.MediaPath = CurrentMediaPath;
+                        // set media uri 
+                        MediaViewModel.MediaSource = CurrentMediaPath;
 
                         // Switch to media view 
                         CurrentView = CurrentViewType.Media;
@@ -251,7 +250,7 @@ namespace MediaPlayer
 
                 else
                 {
-                    CurrentMediaPath = fileName;
+                    CurrentMediaPath = new Uri(fileName);
                     return true;
                 }
             }

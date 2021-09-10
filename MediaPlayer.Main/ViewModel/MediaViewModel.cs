@@ -13,25 +13,14 @@ namespace MediaPlayer
     /// </summary>
     public class MediaViewModel : ObservableObject
     {
-        #region Public Properties 
+        #region Media Properties 
+        public bool MediaLoaded { get; set; } = true;
 
-        public static string MediaPath { get; set; }
+        public static Uri MediaSource { get; set; }
 
-        #endregion
+        public MediaState Load { get; set; }
 
-        #region Media Element Properties 
-
-        private static MediaElement mediaElementObject { get; set; }
-
-        public MediaElement MediaElementObject
-        {
-            get { return mediaElementObject; }
-            set
-            {
-                mediaElementObject = value;
-                OnPropertyChanged("MediaElementObject");
-            }
-        } 
+        public Stretch AspectRatio { get; set; } = Stretch.Uniform;
 
         #endregion
 
@@ -39,11 +28,11 @@ namespace MediaPlayer
 
         public MediaViewModel()
         {
-            // create media instance 
-            MediaElementObject = new MediaElement();
 
-            // load current media to view 
-            LoadMedia();
+            Task.Run(async() => {
+                await LoadMedia();
+                await UnLoadSpinner();
+            });
 
             //// create timer instance 
             //DispatcherTimer Timer = new DispatcherTimer();
@@ -138,22 +127,14 @@ namespace MediaPlayer
 
         #region Helpers 
 
-        /// <summary>
-        /// Loads the current media 
-        /// </summary>
-        private void LoadMedia()
+        private async Task LoadMedia()
         {
-            // get media source 
-            mediaElementObject.Source = new Uri(MediaPath);
+            Load = MediaState.Play;
+        }
 
-            // manually load media 
-            mediaElementObject.LoadedBehavior = MediaState.Manual;
-
-            // set aspect ratio
-            mediaElementObject.Stretch = Stretch.Uniform;
-
-            // play media 
-            mediaElementObject.Play();
+        private async Task UnLoadSpinner()
+        {
+            MediaLoaded = false;
         }
 
         /// <summary>

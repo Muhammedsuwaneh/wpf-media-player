@@ -227,6 +227,7 @@
     <Resource Include="MockUps\ShellView.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Animations\LoadingSpinner\" />
     <Folder Include="Models\" />
     <Folder Include="UnitTest\" />
   </ItemGroup>
@@ -266,6 +267,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Developer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Animations\LoadingSpinner\MediaPlayer.LoadingSpinnerControl\MediaPlayer.LoadingSpinnerControl.csproj">
+      <Project>{a83c867c-de34-496e-a41d-bea143bff7f6}</Project>
+      <Name>MediaPlayer.LoadingSpinnerControl</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Fody.6.5.2\build\Fody.targets" Condition="Exists('packages\Fody.6.5.2\build\Fody.targets')" />

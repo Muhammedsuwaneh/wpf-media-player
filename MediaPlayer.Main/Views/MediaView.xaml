@@ -1,0 +1,26 @@
+﻿<local:BaseView x:TypeArguments="local:MediaViewModel" x:Class="MediaPlayer.MediaView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MediaPlayer" 
+      xmlns:custom="clr-namespace:MediaPlayer.LoadingSpinnerControl;assembly=MediaPlayer.LoadingSpinnerControl"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="900"
+      Title="MediaView">
+    <Grid Background="#000">
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </Grid.Resources>
+        <MediaElement 
+            x:Name="MediaPlayerElement"
+            Source="{Binding MediaSource}"
+            Stretch="{Binding AspectRatio}"
+            LoadedBehavior="{Binding Load}"
+            />
+        <custom:LoadingSpinner Diameter="150" 
+                               Thickness="7"
+                               Color="{StaticResource LightDarkBlueBackgroundBrush}"
+                               IsLoading="{Binding MediaLoaded}"/>
+    </Grid>
+</local:BaseView>
