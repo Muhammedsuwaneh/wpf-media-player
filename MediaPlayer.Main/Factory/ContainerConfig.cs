@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using Autofac;
 
 namespace MediaPlayer
@@ -20,9 +18,15 @@ namespace MediaPlayer
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<WindowResizer>().As<IWindowResizer>();
+            builder.RegisterType<DataAccessFactory>().As<IDataAccessFactory>();
 
-            return builder.Build();
+            // get all interfaces 
+            builder.RegisterAssemblyTypes(Assembly.Load(nameof(MediaPlayer)))
+                .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
+
+            var container = builder.Build();
+
+            return container;
         }
     }
 }

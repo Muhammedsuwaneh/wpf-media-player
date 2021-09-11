@@ -210,13 +210,11 @@
                                   InputGestureText="Ctrl+Shift+O"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource MultipleFilesIcon}" />
-                        <MenuItem Header="_Stream.."
-                                  Template="{StaticResource SubMenu}"
-                                  Icon="{StaticResource StreamIcon}" />
                         <MenuItem Header="_Recently Played Media"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource RecentIcon}">
-                            <MenuItem Header="_" />
+                            <MenuItem Header="1.Recent"
+                                      Template="{StaticResource SubMenu}"/>
                         </MenuItem>
                         <MenuItem Header="_Exit" 
                                   Template="{StaticResource SubMenu}"

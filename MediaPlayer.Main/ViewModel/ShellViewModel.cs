@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Linq;
 using System.IO;
 using System;
+using Autofac;
 
 namespace MediaPlayer
 {
@@ -211,7 +212,17 @@ namespace MediaPlayer
                         MediaViewModel.MediaSource = CurrentMediaPath;
 
                         // Switch to media view 
-                        CurrentView = CurrentViewType.Media;
+                        //CurrentView = CurrentViewType.Media;
+
+                        // Save current media to recently saved 
+                        var container = ContainerConfig.Configure();
+
+                        using(var scope = container.BeginLifetimeScope())
+                        {
+                            var app = scope.Resolve<IDataAccessFactory>();
+
+                            app.RunWriteToFile(@"test.txt", CurrentMediaPath.ToString());
+                        }
                     }
 
                 }));

@@ -29,10 +29,9 @@ namespace MediaPlayer
         public MediaViewModel()
         {
 
-            Task.Run(async() => {
-                await LoadMedia();
-                await UnLoadSpinner();
-            });
+            LoadMedia();
+
+            UnLoadSpinner();
 
             //// create timer instance 
             //DispatcherTimer Timer = new DispatcherTimer();
@@ -127,12 +126,12 @@ namespace MediaPlayer
 
         #region Helpers 
 
-        private async Task LoadMedia()
+        private void LoadMedia()
         {
             Load = MediaState.Play;
         }
 
-        private async Task UnLoadSpinner()
+        private void UnLoadSpinner()
         {
             MediaLoaded = false;
         }

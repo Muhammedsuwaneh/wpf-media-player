@@ -69,7 +69,7 @@
     <Analyzer Include="..\..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPlayer.csproj">
+    <ProjectReference Include="..\MediaPlayer.Main\MediaPlayer.csproj">
       <Project>{41b21d09-c15a-4601-aaaa-7ce957bd7a17}</Project>
       <Name>MediaPlayer</Name>
     </ProjectReference>

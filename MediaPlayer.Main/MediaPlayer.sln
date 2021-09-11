@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayer", "MediaPlayer.csproj", "{41B21D09-C15A-4601-AAAA-7CE957BD7A17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayer.Tests", "UnitTest\MediaUnitTests\MediaPlayer.Tests.csproj", "{BDF12ADE-096B-41E7-B3FB-796471F7B136}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayer.LoadingSpinnerControl", "..\MediaPlayer.LoadingSpinnerControl\MediaPlayer.LoadingSpinnerControl.csproj", "{A83C867C-DE34-496E-A41D-BEA143BFF7F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayer.LoadingSpinnerControl", "Animations\LoadingSpinner\MediaPlayer.LoadingSpinnerControl\MediaPlayer.LoadingSpinnerControl.csproj", "{A83C867C-DE34-496E-A41D-BEA143BFF7F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayer.Tests", "..\MediaPlayer.Test\MediaPlayer.Tests.csproj", "{BDF12ADE-096B-41E7-B3FB-796471F7B136}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{41B21D09-C15A-4601-AAAA-7CE957BD7A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41B21D09-C15A-4601-AAAA-7CE957BD7A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41B21D09-C15A-4601-AAAA-7CE957BD7A17}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDF12ADE-096B-41E7-B3FB-796471F7B136}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDF12ADE-096B-41E7-B3FB-796471F7B136}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDF12ADE-096B-41E7-B3FB-796471F7B136}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDF12ADE-096B-41E7-B3FB-796471F7B136}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A83C867C-DE34-496E-A41D-BEA143BFF7F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A83C867C-DE34-496E-A41D-BEA143BFF7F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A83C867C-DE34-496E-A41D-BEA143BFF7F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A83C867C-DE34-496E-A41D-BEA143BFF7F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDF12ADE-096B-41E7-B3FB-796471F7B136}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDF12ADE-096B-41E7-B3FB-796471F7B136}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDF12ADE-096B-41E7-B3FB-796471F7B136}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDF12ADE-096B-41E7-B3FB-796471F7B136}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -106,10 +106,13 @@
     </ApplicationDefinition>
     <Compile Include="Core\IObservableObject.cs" />
     <Compile Include="Data\DataAccess.cs" />
+    <Compile Include="Data\IDataAccess.cs" />
     <Compile Include="EventHandlers\EventArgs.cs" />
     <Compile Include="EventHandlers\EventRaiser.cs" />
     <Compile Include="EventHandlers\IRelayCommand.cs" />
     <Compile Include="Factory\ContainerConfig.cs" />
+    <Compile Include="Factory\DataAccessFactory.cs" />
+    <Compile Include="Factory\IDataAccessFactory.cs" />
     <Compile Include="ViewModel\MediaBackgroundModelView.cs" />
     <Compile Include="Views\Base\BaseView.cs" />
     <Compile Include="Views\MediaBackgroundView.xaml.cs">
@@ -119,12 +122,12 @@
       <DependentUpon>MediaView.xaml</DependentUpon>
     </Compile>
     <Compile Include="NavigationTypes\CurrentViewType.cs" />
-    <Compile Include="Utilities\IWindowResizer.cs" />
-    <Compile Include="Utilities\WindowResizer.cs" />
     <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
     <Compile Include="ValueConverters\BaseValueConverters.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Window\IWindowResizer.cs" />
+    <Compile Include="Window\WindowResizer.cs" />
     <Page Include="Views\MediaBackgroundView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -206,30 +209,20 @@
     <Resource Include="Fonts\Lato-SemiboldItalic.ttf" />
     <Resource Include="Fonts\Lato-Thin.ttf" />
     <Resource Include="Fonts\Lato-ThinItalic.ttf" />
-    <None Include=".gitignore" />
     <None Include="FodyWeavers.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="LICENSE" />
-    <None Include="MockUps\MediaView.xd" />
-    <None Include="MockUps\ShellView.xd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="MockUps\ShellView.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Animations\LoadingSpinner\" />
     <Folder Include="Models\" />
-    <Folder Include="UnitTest\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Backward.png" />
@@ -269,7 +262,7 @@
     <Resource Include="Assets\Developer.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Animations\LoadingSpinner\MediaPlayer.LoadingSpinnerControl\MediaPlayer.LoadingSpinnerControl.csproj">
+    <ProjectReference Include="..\MediaPlayer.LoadingSpinnerControl\MediaPlayer.LoadingSpinnerControl.csproj">
       <Project>{a83c867c-de34-496e-a41d-bea143bff7f6}</Project>
       <Name>MediaPlayer.LoadingSpinnerControl</Name>
     </ProjectReference>
