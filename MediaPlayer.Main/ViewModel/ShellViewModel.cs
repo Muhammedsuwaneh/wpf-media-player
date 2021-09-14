@@ -2,10 +2,13 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Reflection;
 using System;
 using Autofac;
+using System.Collections.ObjectModel;
 
 namespace MediaPlayer
 {
@@ -32,24 +35,58 @@ namespace MediaPlayer
         };
 
         /// <summary>
-        /// Current media path
-        /// </summary>
-        private string MediaPath { get; set; }
-
-        /// <summary>
         /// Store current media path for future use 
         /// </summary>
-        private Uri CurrentMediaPath { get; set; }
+        private string CurrentMediaPath { get; set; } = string.Empty;
 
         /// <summary>
         /// Sets the window radius 
         /// </summary>
         private int _WindowRadius { get; set; } = 20;
 
+        #endregion
+
+        #region Public Properties 
+
         /// <summary>
-        /// Selected Media File Path
+        /// Recently played media files property 
         /// </summary>
-        public string MediaFilePath { get; set; } = string.Empty;
+        public ObservableCollection<MediaFile> _RecentMediaFiles { get; set; } 
+        
+        /// <summary>
+        /// Recently played media to be bound 
+        /// </summary>
+        public ObservableCollection<MediaFile> RecentMediaFiles
+        {
+            get
+            {
+                return _RecentMediaFiles;
+            }
+
+            set
+            {
+                if (_RecentMediaFiles != value)
+                {
+                    _RecentMediaFiles = value;
+                    OnPropertyChanged("RecentMediaFiles");
+                }
+            }
+        }
+
+        private bool _RecentIsNotEmpty { get; set; } = false;
+
+        public bool RecentIsNotEmpty
+        {
+            get { return _RecentIsNotEmpty; }
+            set
+            {
+                if(_RecentIsNotEmpty != value)
+                {
+                    _RecentIsNotEmpty = value;
+                    OnPropertyChanged("RecentIsNotEmpty");
+                }
+            }
+        }
 
         #endregion
 
@@ -80,7 +117,19 @@ namespace MediaPlayer
         /// <summary>
         /// the current content control view 
         /// </summary>
-        public CurrentViewType CurrentView { get; set; } = CurrentViewType.MediaBackground;
+        public CurrentViewType _CurrentView { get; set; } = CurrentViewType.MediaBackground;
+        public CurrentViewType CurrentView
+        {
+            get { return _CurrentView; }
+            set
+            {
+                if(_CurrentView != value)
+                {
+                    _CurrentView = value;
+                    OnPropertyChanged("CurrentView");
+                }
+            }
+        }
 
         #endregion
 
@@ -132,6 +181,8 @@ namespace MediaPlayer
 
             // helps in resizing window 
             var resizer = new WindowResizer(_window);
+
+            ReloadRecentlyPlayed();
         }
 
         #endregion
@@ -209,20 +260,20 @@ namespace MediaPlayer
                     if (GetMediaFile())
                     {
                         // set media uri 
-                        MediaViewModel.MediaSource = CurrentMediaPath;
+                        MediaViewModel._MediaSource = new Uri(CurrentMediaPath);
+
+                        // Save current media to recently saved
+                        DataAccessFactory.GetDataAccessInstance().WriteToFile(@"Recent.dat", CurrentMediaPath);
+
+                        // Reloads the recently played media 
+                        ReloadRecentlyPlayed();
+
+                        // remove current media view for replays or viewing other media 
+                        if (_CurrentView == CurrentViewType.Media)
+                            _CurrentView = CurrentViewType.MediaBackground;
 
                         // Switch to media view 
-                        //CurrentView = CurrentViewType.Media;
-
-                        // Save current media to recently saved 
-                        var container = ContainerConfig.Configure();
-
-                        using(var scope = container.BeginLifetimeScope())
-                        {
-                            var app = scope.Resolve<IDataAccessFactory>();
-
-                            app.RunWriteToFile(@"test.txt", CurrentMediaPath.ToString());
-                        }
+                        _CurrentView = CurrentViewType.Media;
                     }
 
                 }));
@@ -234,6 +285,10 @@ namespace MediaPlayer
 
         #region Helpers 
     
+        /// <summary>
+        /// Obtains the selected media file 
+        /// </summary>
+        /// <returns></returns>
         private bool GetMediaFile()
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
@@ -261,12 +316,24 @@ namespace MediaPlayer
 
                 else
                 {
-                    CurrentMediaPath = new Uri(fileName);
+                    CurrentMediaPath = fileName;
                     return true;
                 }
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Loads the recently with file path data 
+        /// </summary>
+        private void ReloadRecentlyPlayed()
+        {
+            /// Get the recent data 
+            _RecentMediaFiles = DataAccessFactory.GetDataAccessInstance().ReadFromFile(@"Recent.dat");
+
+            // check if recent data is empty 
+            _RecentIsNotEmpty = _RecentMediaFiles.Count > 0;
         }
 
         /// <summary>

@@ -12,12 +12,16 @@
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </Grid.Resources>
+        <!--- Media Element -->
         <MediaElement 
             x:Name="MediaPlayerElement"
             Source="{Binding MediaSource}"
             Stretch="{Binding AspectRatio}"
             LoadedBehavior="{Binding Load}"
             />
+        <!--- Audio Spinner -->
+        
+        <!-- Loading Spinner -->
         <custom:LoadingSpinner Diameter="150" 
                                Thickness="7"
                                Color="{StaticResource LightDarkBlueBackgroundBrush}"

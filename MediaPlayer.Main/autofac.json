@@ -1,0 +1,10 @@
+{
+  "defaultAssembly": "MediaPlayer",
+  "components": [
+    { "type": "MediaPlayer.ViewModel.MainViewModel" },
+    { "type": "MediaPlayer.ViewModel.MediaBackgroundModelView" },
+    { "type": "MediaPlayer.ViewModel.MediaViewModel" },
+    { "type": "MediaPlayer.ViewModel.ShellViewModel" },
+    { "type": "MediaPlayer.ViewModel.ViewModelLocator" }
+  ]
+}

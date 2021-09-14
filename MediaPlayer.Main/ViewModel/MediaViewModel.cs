@@ -14,13 +14,42 @@ namespace MediaPlayer
     public class MediaViewModel : ObservableObject
     {
         #region Media Properties 
-        public bool MediaLoaded { get; set; } = true;
+        private bool _MediaLoaded { get; set; } = false;
+        public bool MediaLoaded
+        {
+            get { return _MediaLoaded; } 
+            set
+            {
+                if(_MediaLoaded != value)
+                {
+                    _MediaLoaded = value;
+                    OnPropertyChanged("MediaLoaded");
+                }
+            }
+        }
 
-        public static Uri MediaSource { get; set; }
+        public static Uri _MediaSource { get; set; } 
+
+        public Uri MediaSource
+        {
+            get
+            {
+                return _MediaSource;
+            }
+
+            set
+            {
+                if(_MediaSource != value)
+                {
+                    _MediaSource = value;
+                    OnPropertyChanged("MediaSource");
+                }
+            }
+        }
 
         public MediaState Load { get; set; }
 
-        public Stretch AspectRatio { get; set; } = Stretch.Uniform;
+        public Stretch AspectRatio { get; set; } = Stretch.Fill;
 
         #endregion
 
@@ -30,8 +59,6 @@ namespace MediaPlayer
         {
 
             LoadMedia();
-
-            UnLoadSpinner();
 
             //// create timer instance 
             //DispatcherTimer Timer = new DispatcherTimer();
@@ -126,14 +153,12 @@ namespace MediaPlayer
 
         #region Helpers 
 
+        /// <summary>
+        /// Loads the current media 
+        /// </summary>
         private void LoadMedia()
         {
             Load = MediaState.Play;
-        }
-
-        private void UnLoadSpinner()
-        {
-            MediaLoaded = false;
         }
 
         /// <summary>

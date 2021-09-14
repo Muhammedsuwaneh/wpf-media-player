@@ -18,6 +18,9 @@
     <!-- Style Menubar items -->
     <Window.Resources>
 
+        <!--- Boolean converter -->
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
         <!--- Top level menu template style-->
         <ControlTemplate x:Key="MenuTop" TargetType="MenuItem">
             <StackPanel TextBlock.FontSize="15px" Height="40" TextBlock.FontFamily="{StaticResource LatoRegular}">
@@ -63,7 +66,7 @@
 
                 <!--- Sub items -->
                 <Popup IsOpen="{TemplateBinding IsSubmenuOpen}"
-                   AllowsTransparency="True" Focusable="False">
+                   AllowsTransparency="True" Focusable="False" Placement="Right">
                     <Border BorderThickness="0" Background="{StaticResource LightDarkBlueBackgroundBrush}"
                         BorderBrush="#e0e0e0">
                         <StackPanel IsItemsHost="True"/>
@@ -192,13 +195,11 @@
                             Command="{Binding CloseWindow_Click}"/>
 
                 </StackPanel>
-
             </Grid>
 
             <!-- Menu Bar -->
             <StackPanel Margin="20,0,20,0" Grid.Row="1">
                 <Menu IsMainMenu="True">
-                    
                     <!-- Media -->
                     <MenuItem Header="_Media" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Open File.." 
@@ -210,13 +211,36 @@
                                   InputGestureText="Ctrl+Shift+O"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource MultipleFilesIcon}" />
-                        <MenuItem Header="_Recently Played Media"
+                        <MenuItem Header="_Recently Played"
+                                  IsEnabled="{Binding RecentIsNotEmpty}"
+                                  InputGestureText=">"
+                                  ItemsSource="{Binding Path=RecentMediaFiles}"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource RecentIcon}">
-                            <MenuItem Header="1.Recent"
-                                      Template="{StaticResource SubMenu}"/>
+                            <MenuItem.ItemContainerStyle>
+                                <Style TargetType="{x:Type MenuItem}">
+                                    <Setter Property="Margin" Value="0,5,5,5"/>
+                                    <Setter Property="Foreground" Value="#fff"/>
+                                    
+                                    <Style.Triggers>
+                                        <Trigger Property="IsHighlighted"  Value="True">
+                                            <Setter Property="Background" Value="#212E3C"/>
+                                            <Setter Property="Foreground" Value="#fff"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                    
+                                </Style>
+                            </MenuItem.ItemContainerStyle>
+                            <MenuItem.ItemTemplate>
+                                <HierarchicalDataTemplate 
+                                    DataType="{x:Type local:MediaFile}"
+                                    ItemsSource="{Binding Path=RecentMediaFiles}">
+                                    <TextBlock Text="{Binding FilePath}" />
+                                </HierarchicalDataTemplate>
+                            </MenuItem.ItemTemplate>
                         </MenuItem>
                         <MenuItem Header="_Exit" 
+                                  InputGestureText="Ctrl+Q"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource ExitIcon}"
                                   Command="{Binding CloseWindow_Click}"/>

@@ -18,15 +18,11 @@ namespace MediaPlayer
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<DataAccessFactory>().As<IDataAccessFactory>();
-
-            // get all interfaces 
+            // register all interfaces 
             builder.RegisterAssemblyTypes(Assembly.Load(nameof(MediaPlayer)))
                 .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
 
-            var container = builder.Build();
-
-            return container;
+            return builder.Build();
         }
     }
 }
