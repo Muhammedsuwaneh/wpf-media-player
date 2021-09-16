@@ -26,11 +26,23 @@ namespace MediaPlayer
             // check if file even exist before we proceed 
             if (MediaPathAlreadyExist(filename, data)) return;
 
-            fileStream = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.None);
-
-            using(var writer = new BinaryWriter(fileStream))
+            if(CheckAmountOfItemsInFile(filename) == 5)
             {
-                writer.Write(data);
+                RewriteFile(filename, data);
+                return;
+            }
+
+            // create a new file if does not exist 
+            if (File.Exists(filename) == false)
+                fileStream = new FileStream(filename, FileMode.OpenOrCreate);
+            // creates an appendable filestream 
+            else
+                fileStream = new FileStream(filename, FileMode.Append);
+
+            using (StreamWriter writer = new StreamWriter(fileStream))
+            {
+                // write to file 
+                writer.WriteLine(data);
             }
         }
 
@@ -45,16 +57,15 @@ namespace MediaPlayer
 
             if (File.Exists(filename) != false)
             {
-                FileInfo file = new FileInfo(filename);
+                string[] data = File.ReadAllLines(filename);
 
-                using(BinaryReader bn = new BinaryReader(file.OpenRead()))
+                foreach(string line in data)
                 {
-                    string path = bn.ReadString();
-                    output.Add(new MediaFile { FilePath = path });
+                    output.Add(new MediaFile { FilePath = line });
                 }
-            }
 
-            output = new ObservableCollection<MediaFile>(output.Reverse());
+                output = new ObservableCollection<MediaFile>(output.Reverse());
+            }
 
             return output;
         }
@@ -73,17 +84,57 @@ namespace MediaPlayer
         {
             if(File.Exists(filename) == true)
             {
-                FileInfo file = new FileInfo(filename);
+                string[] data = File.ReadAllLines(filename);
 
-                using (BinaryReader bn = new BinaryReader(file.OpenRead()))
+                foreach (string line in data)
                 {
-                    string path = bn.ReadString();
-
-                    if (path == mediaPath) return true;
+                    if (line == mediaPath) return true;
                 }
             } 
 
             return false;
+        }
+
+        /// <summary>
+        /// Returns the amount of items in a file
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static int CheckAmountOfItemsInFile(string filename)
+        {
+            if(File.Exists(filename))
+            {
+                string[] data = File.ReadAllLines(filename);
+
+                return data.Length;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Replaces the first recently played media in file 
+        /// </summary>
+        /// <param name="filename"></param>
+        public static void RewriteFile(string filename, string data)
+        {
+            if(File.Exists(filename))
+            {
+                // create a new temp storage for media paths 
+                List<string> oldData = new List<string>();
+
+                // store recent data to a temp file
+                oldData.AddRange(File.ReadAllLines(filename));
+
+                // remove first recent file 
+                oldData.RemoveAt(0);
+
+                // add new recent media path
+                oldData.Add(data);
+
+                // rewrite file 
+                File.WriteAllLines(filename, oldData);
+            }
         }
 
         #endregion

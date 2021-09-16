@@ -219,23 +219,19 @@
                                   Icon="{StaticResource RecentIcon}">
                             <MenuItem.ItemContainerStyle>
                                 <Style TargetType="{x:Type MenuItem}">
+                                    <!-- Style properties --><!--
                                     <Setter Property="Margin" Value="0,5,5,5"/>
-                                    <Setter Property="Foreground" Value="#fff"/>
-                                    
-                                    <Style.Triggers>
-                                        <Trigger Property="IsHighlighted"  Value="True">
-                                            <Setter Property="Background" Value="#212E3C"/>
-                                            <Setter Property="Foreground" Value="#fff"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                    
+                                    <Setter Property="Foreground" Value="#fff"/>-->
+
+                                    <!-- Commands -->
+                                    <Setter Property="Command" Value="{Binding PlayRecent_Click}" />
                                 </Style>
                             </MenuItem.ItemContainerStyle>
                             <MenuItem.ItemTemplate>
                                 <HierarchicalDataTemplate 
                                     DataType="{x:Type local:MediaFile}"
                                     ItemsSource="{Binding Path=RecentMediaFiles}">
-                                    <TextBlock Text="{Binding FilePath}" />
+                                    <TextBlock Text="{Binding FilePath}"/>
                                 </HierarchicalDataTemplate>
                             </MenuItem.ItemTemplate>
                         </MenuItem>

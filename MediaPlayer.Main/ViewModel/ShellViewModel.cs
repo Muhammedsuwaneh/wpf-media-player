@@ -20,10 +20,23 @@ namespace MediaPlayer
         #region Private Properties
 
         /// <summary>
+        /// File where recent media is stored 
+        /// </summary>
+        private string RecentMediaFileName { get; set; } = @"Recent.dat";
+        
+        /// <summary>
+        /// File where a user's playlist is saved 
+        /// </summary>
+        private string PlaylistFileName { get; set; } = @"Playlist.txt";
+
+        /// <summary>
         /// Current window to be set
         /// </summary>
         private Window _window { get; set; }
 
+        /// <summary>
+        /// Supported media 
+        /// </summary>
         private static string[] SupportedFileTypes = new string[]
         {
             ".mp3",
@@ -160,6 +173,11 @@ namespace MediaPlayer
         /// </summary>
         private ICommand OpenFileCommand { get; set; }
 
+        /// <summary>
+        /// Play recent media command 
+        /// </summary>
+        private ICommand PlayRecentCommand { get; set; }
+
         #endregion
 
         #region Constructor 
@@ -259,23 +277,23 @@ namespace MediaPlayer
                 {
                     if (GetMediaFile())
                     {
-                        // set media uri 
-                        MediaViewModel._MediaSource = new Uri(CurrentMediaPath);
-
-                        // Save current media to recently saved
-                        DataAccessFactory.GetDataAccessInstance().WriteToFile(@"Recent.dat", CurrentMediaPath);
-
-                        // Reloads the recently played media 
-                        ReloadRecentlyPlayed();
-
-                        // remove current media view for replays or viewing other media 
-                        if (_CurrentView == CurrentViewType.Media)
-                            _CurrentView = CurrentViewType.MediaBackground;
-
-                        // Switch to media view 
-                        _CurrentView = CurrentViewType.Media;
+                        LoadMedia();
                     }
 
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Plays the recent media 
+        /// </summary>
+        public ICommand PlayRecent_Click
+        {
+            get
+            {
+                return PlayRecentCommand ?? (PlayRecentCommand = new RelayCommand<MouseButtonEventArgs>(x =>
+                {
+                    _window.Close();
                 }));
             }
         }
@@ -284,7 +302,7 @@ namespace MediaPlayer
 
 
         #region Helpers 
-    
+
         /// <summary>
         /// Obtains the selected media file 
         /// </summary>
@@ -330,7 +348,7 @@ namespace MediaPlayer
         private void ReloadRecentlyPlayed()
         {
             /// Get the recent data 
-            _RecentMediaFiles = DataAccessFactory.GetDataAccessInstance().ReadFromFile(@"Recent.dat");
+            _RecentMediaFiles = DataAccessFactory.GetDataAccessInstance().ReadFromFile(RecentMediaFileName);
 
             // check if recent data is empty 
             _RecentIsNotEmpty = _RecentMediaFiles.Count > 0;
@@ -344,6 +362,28 @@ namespace MediaPlayer
         public static bool CheckForEmptyFilePaths(string file)
         {
             return string.IsNullOrEmpty(file);
+        }
+
+        /// <summary>
+        /// Loads the media and switches the media view 
+        /// </summary>
+        private void LoadMedia()
+        {
+            // set media uri 
+            MediaViewModel._MediaSource = new Uri(CurrentMediaPath);
+
+            // Save current media to recently saved
+            DataAccessFactory.GetDataAccessInstance().WriteToFile(RecentMediaFileName, CurrentMediaPath);
+
+            // Reloads the recently played media 
+            ReloadRecentlyPlayed();
+
+            // remove current media view for replays or viewing other media 
+            if (_CurrentView == CurrentViewType.Media)
+                _CurrentView = CurrentViewType.MediaBackground;
+
+            // Switch to media view 
+            _CurrentView = CurrentViewType.Media;
         }
 
         /// <summary>
