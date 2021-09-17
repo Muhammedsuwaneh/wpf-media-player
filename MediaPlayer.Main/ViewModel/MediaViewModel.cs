@@ -17,10 +17,10 @@ namespace MediaPlayer
         private bool _MediaLoaded { get; set; } = false;
         public bool MediaLoaded
         {
-            get { return _MediaLoaded; } 
+            get { return _MediaLoaded; }
             set
             {
-                if(_MediaLoaded != value)
+                if (_MediaLoaded != value)
                 {
                     _MediaLoaded = value;
                     OnPropertyChanged("MediaLoaded");
@@ -28,7 +28,7 @@ namespace MediaPlayer
             }
         }
 
-        public static Uri _MediaSource { get; set; } 
+        public static Uri _MediaSource;
 
         public Uri MediaSource
         {
@@ -39,7 +39,7 @@ namespace MediaPlayer
 
             set
             {
-                if(_MediaSource != value)
+                if (_MediaSource != value)
                 {
                     _MediaSource = value;
                     OnPropertyChanged("MediaSource");

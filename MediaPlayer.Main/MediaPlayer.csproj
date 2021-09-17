@@ -113,8 +113,10 @@
     <Compile Include="EventHandlers\EventArgs.cs" />
     <Compile Include="EventHandlers\EventRaiser.cs" />
     <Compile Include="EventHandlers\IRelayCommand.cs" />
+    <Compile Include="EventHandlers\NonGenericRelayCommand.cs" />
     <Compile Include="Factory\ContainerConfig.cs" />
     <Compile Include="Factory\DataAccessFactory.cs" />
+    <Compile Include="Factory\ViewsFactory.cs" />
     <Compile Include="Models\MediaFile.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MediaBackgroundModelView.cs" />

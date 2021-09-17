@@ -211,29 +211,24 @@
                                   InputGestureText="Ctrl+Shift+O"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource MultipleFilesIcon}" />
+                        <Separator Template="{StaticResource MenuSep}" />
                         <MenuItem Header="_Recently Played"
                                   IsEnabled="{Binding RecentIsNotEmpty}"
                                   InputGestureText=">"
+                                  Command="{Binding PlayRecentCommand}"
                                   ItemsSource="{Binding Path=RecentMediaFiles}"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource RecentIcon}">
                             <MenuItem.ItemContainerStyle>
-                                <Style TargetType="{x:Type MenuItem}">
-                                    <!-- Style properties --><!--
+                                <Style TargetType="MenuItem">
+                                     <!--Style properties--> 
                                     <Setter Property="Margin" Value="0,5,5,5"/>
-                                    <Setter Property="Foreground" Value="#fff"/>-->
-
-                                    <!-- Commands -->
-                                    <Setter Property="Command" Value="{Binding PlayRecent_Click}" />
+                                    <Setter Property="Foreground" Value="#fff"/>
+                                    <Setter Property="Header" Value="{Binding FilePath}" />
+                                     <!--Commands--> 
+                                    <Setter Property="Command" Value="{Binding PlayRecentCommand}" />
                                 </Style>
                             </MenuItem.ItemContainerStyle>
-                            <MenuItem.ItemTemplate>
-                                <HierarchicalDataTemplate 
-                                    DataType="{x:Type local:MediaFile}"
-                                    ItemsSource="{Binding Path=RecentMediaFiles}">
-                                    <TextBlock Text="{Binding FilePath}"/>
-                                </HierarchicalDataTemplate>
-                            </MenuItem.ItemTemplate>
                         </MenuItem>
                         <MenuItem Header="_Exit" 
                                   InputGestureText="Ctrl+Q"

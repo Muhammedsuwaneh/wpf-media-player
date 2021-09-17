@@ -59,7 +59,7 @@ namespace MediaPlayer
             {
                 string[] data = File.ReadAllLines(filename);
 
-                foreach(string line in data)
+                foreach (string line in data)
                 {
                     output.Add(new MediaFile { FilePath = line });
                 }

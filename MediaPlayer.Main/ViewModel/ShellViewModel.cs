@@ -23,7 +23,7 @@ namespace MediaPlayer
         /// File where recent media is stored 
         /// </summary>
         private string RecentMediaFileName { get; set; } = @"Recent.dat";
-        
+
         /// <summary>
         /// File where a user's playlist is saved 
         /// </summary>
@@ -60,12 +60,11 @@ namespace MediaPlayer
         #endregion
 
         #region Public Properties 
-
         /// <summary>
         /// Recently played media files property 
         /// </summary>
-        public ObservableCollection<MediaFile> _RecentMediaFiles { get; set; } 
-        
+        private ObservableCollection<MediaFile> _RecentMediaFiles { get; set; }
+
         /// <summary>
         /// Recently played media to be bound 
         /// </summary>
@@ -93,7 +92,7 @@ namespace MediaPlayer
             get { return _RecentIsNotEmpty; }
             set
             {
-                if(_RecentIsNotEmpty != value)
+                if (_RecentIsNotEmpty != value)
                 {
                     _RecentIsNotEmpty = value;
                     OnPropertyChanged("RecentIsNotEmpty");
@@ -131,12 +130,13 @@ namespace MediaPlayer
         /// the current content control view 
         /// </summary>
         public CurrentViewType _CurrentView { get; set; } = CurrentViewType.MediaBackground;
+
         public CurrentViewType CurrentView
         {
             get { return _CurrentView; }
             set
             {
-                if(_CurrentView != value)
+                if (_CurrentView != value)
                 {
                     _CurrentView = value;
                     OnPropertyChanged("CurrentView");
@@ -172,11 +172,6 @@ namespace MediaPlayer
         /// Open File command 
         /// </summary>
         private ICommand OpenFileCommand { get; set; }
-
-        /// <summary>
-        /// Play recent media command 
-        /// </summary>
-        private ICommand PlayRecentCommand { get; set; }
 
         #endregion
 
@@ -216,9 +211,9 @@ namespace MediaPlayer
             {
                 return WindowDragCommand ?? (WindowDragCommand = new RelayCommand<MouseButtonEventArgs>(x =>
                 {
-                    if(x.ClickCount == 2)
+                    if (x.ClickCount == 2)
                         _window.WindowState ^= WindowState.Maximized;
-                    else 
+                    else
                         _window.DragMove();
 
                 }));
@@ -259,9 +254,9 @@ namespace MediaPlayer
         {
             get
             {
-                return CloseWindowCommand ?? (CloseWindowCommand = new RelayCommand<object>(x => 
+                return CloseWindowCommand ?? (CloseWindowCommand = new RelayCommand<object>(x =>
                 {
-                      _window.Close();
+                    _window.Close();
                 }));
             }
         }
@@ -277,23 +272,9 @@ namespace MediaPlayer
                 {
                     if (GetMediaFile())
                     {
-                        LoadMedia();
+                        LoadMedia(CurrentMediaPath);
                     }
 
-                }));
-            }
-        }
-
-        /// <summary>
-        /// Plays the recent media 
-        /// </summary>
-        public ICommand PlayRecent_Click
-        {
-            get
-            {
-                return PlayRecentCommand ?? (PlayRecentCommand = new RelayCommand<MouseButtonEventArgs>(x =>
-                {
-                    _window.Close();
                 }));
             }
         }
@@ -367,13 +348,13 @@ namespace MediaPlayer
         /// <summary>
         /// Loads the media and switches the media view 
         /// </summary>
-        private void LoadMedia()
+        public void LoadMedia(string filename)
         {
             // set media uri 
-            MediaViewModel._MediaSource = new Uri(CurrentMediaPath);
+            MediaViewModel._MediaSource = new Uri(filename);
 
             // Save current media to recently saved
-            DataAccessFactory.GetDataAccessInstance().WriteToFile(RecentMediaFileName, CurrentMediaPath);
+            DataAccessFactory.GetDataAccessInstance().WriteToFile(RecentMediaFileName, filename);
 
             // Reloads the recently played media 
             ReloadRecentlyPlayed();
