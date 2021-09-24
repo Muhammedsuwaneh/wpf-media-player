@@ -15,7 +15,7 @@ namespace MediaPlayer
     /// <summary>
     /// Main window view model
     /// </summary>
-    public class ShellViewModel : ObservableObject
+    public class ShellViewModel : ObservableObject, IShellViewModel
     {
         #region Private Properties
 
@@ -25,14 +25,9 @@ namespace MediaPlayer
         private string RecentMediaFileName { get; set; } = @"Recent.dat";
 
         /// <summary>
-        /// File where a user's playlist is saved 
-        /// </summary>
-        private string PlaylistFileName { get; set; } = @"Playlist.txt";
-
-        /// <summary>
         /// Current window to be set
         /// </summary>
-        private Window _window { get; set; }
+        public Window _window { get; set; }
 
         /// <summary>
         /// Supported media 
@@ -60,15 +55,19 @@ namespace MediaPlayer
         #endregion
 
         #region Public Properties 
+
+        public string FilePath { get; set; }
+
         /// <summary>
         /// Recently played media files property 
         /// </summary>
-        private ObservableCollection<MediaFile> _RecentMediaFiles { get; set; }
+        //private ObservableCollection<MediaFile> _RecentMediaFiles { get; set; }
+        private ObservableCollection<IShellViewModel> _RecentMediaFiles { get; set; }
 
         /// <summary>
         /// Recently played media to be bound 
         /// </summary>
-        public ObservableCollection<MediaFile> RecentMediaFiles
+        public ObservableCollection<IShellViewModel> RecentMediaFiles
         {
             get
             {
@@ -178,13 +177,25 @@ namespace MediaPlayer
         #region Constructor 
 
         /// <summary>
-        /// ShellView Constructor
+        /// Default constructor 
         /// </summary>
-        /// <param name="window"></param>
         public ShellViewModel(Window window)
         {
             _window = window;
 
+            InitWindow();
+        }
+
+        public ShellViewModel(string filePath)
+        {
+            FilePath = filePath;
+        }
+
+        /// <summary>
+        /// Initilaizes window properties 
+        /// </summary>
+        public void InitWindow()
+        {
             // listen out for window resizing 
             _window.StateChanged += (sender, e) =>
             {
@@ -192,7 +203,7 @@ namespace MediaPlayer
                 OnPropertyChanged(nameof(WindowRadius));
             };
 
-            // helps in resizing window 
+            //// helps in resizing window 
             var resizer = new WindowResizer(_window);
 
             ReloadRecentlyPlayed();
@@ -272,9 +283,31 @@ namespace MediaPlayer
                 {
                     if (GetMediaFile())
                     {
-                        LoadMedia(CurrentMediaPath);
+                        // Loads media 
+                        LoadMedia();
+
+                        // Reloads the recently played media 
+                        ReloadRecentlyPlayed();
                     }
 
+                }));
+            }
+        }
+
+        private ICommand _PlayRecentCommand { get; set; }
+
+        /// <summary>
+        /// Plays the recent media 
+        /// </summary>
+        public ICommand PlayRecentCommand
+        {
+            get
+            {
+                return _PlayRecentCommand ?? (_PlayRecentCommand = new RelayCommand<object>(x =>
+                {
+                    CurrentMediaPath = FilePath;
+
+                    LoadMedia();
                 }));
             }
         }
@@ -324,18 +357,6 @@ namespace MediaPlayer
         }
 
         /// <summary>
-        /// Loads the recently with file path data 
-        /// </summary>
-        private void ReloadRecentlyPlayed()
-        {
-            /// Get the recent data 
-            _RecentMediaFiles = DataAccessFactory.GetDataAccessInstance().ReadFromFile(RecentMediaFileName);
-
-            // check if recent data is empty 
-            _RecentIsNotEmpty = _RecentMediaFiles.Count > 0;
-        }
-
-        /// <summary>
         /// checks if current selected file is an empty file or not
         /// </summary>
         /// <param name="path"></param>
@@ -348,16 +369,13 @@ namespace MediaPlayer
         /// <summary>
         /// Loads the media and switches the media view 
         /// </summary>
-        public void LoadMedia(string filename)
+        public void LoadMedia()
         {
             // set media uri 
-            MediaViewModel._MediaSource = new Uri(filename);
+            MediaViewModel._MediaSource = new Uri(CurrentMediaPath);
 
             // Save current media to recently saved
-            DataAccessFactory.GetDataAccessInstance().WriteToFile(RecentMediaFileName, filename);
-
-            // Reloads the recently played media 
-            ReloadRecentlyPlayed();
+            DataAccessFactory.GetDataAccessInstance().WriteToFile(RecentMediaFileName, CurrentMediaPath);
 
             // remove current media view for replays or viewing other media 
             if (_CurrentView == CurrentViewType.Media)
@@ -365,6 +383,18 @@ namespace MediaPlayer
 
             // Switch to media view 
             _CurrentView = CurrentViewType.Media;
+        }
+
+        /// <summary>
+        /// Loads the recently with file path data 
+        /// </summary>
+        private void ReloadRecentlyPlayed()
+        {
+            /// Get the recent data 
+            _RecentMediaFiles = DataAccessFactory.GetDataAccessInstance().ReadFromFile(RecentMediaFileName, _window);
+
+            // check if recent data is empty 
+            _RecentIsNotEmpty = _RecentMediaFiles.Count > 0;
         }
 
         /// <summary>

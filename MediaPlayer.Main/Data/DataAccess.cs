@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Text;
 using System.Collections.ObjectModel;
 
@@ -31,7 +32,6 @@ namespace MediaPlayer
                 RewriteFile(filename, data);
                 return;
             }
-
             // create a new file if does not exist 
             if (File.Exists(filename) == false)
                 fileStream = new FileStream(filename, FileMode.OpenOrCreate);
@@ -51,9 +51,9 @@ namespace MediaPlayer
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public ObservableCollection<MediaFile> ReadFromFile(string filename)
+        public ObservableCollection<IShellViewModel> ReadFromFile(string filename, Window shellview)
         {
-            ObservableCollection<MediaFile> output = new ObservableCollection<MediaFile>();
+            ObservableCollection<IShellViewModel> output = new ObservableCollection<IShellViewModel>();
 
             if (File.Exists(filename) != false)
             {
@@ -61,10 +61,14 @@ namespace MediaPlayer
 
                 foreach (string line in data)
                 {
-                    output.Add(new MediaFile { FilePath = line });
+                    IShellViewModel shell = new ShellViewModel(line);
+
+                    shell._window = shellview;
+
+                    output.Add(shell);
                 }
 
-                output = new ObservableCollection<MediaFile>(output.Reverse());
+                output = new ObservableCollection<IShellViewModel>(output.Reverse());
             }
 
             return output;

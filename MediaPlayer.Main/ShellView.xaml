@@ -13,7 +13,7 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         Background="Transparent"
-        Height="600" Width="900">
+        Height="650" Width="900">
 
     <!-- Style Menubar items -->
     <Window.Resources>
@@ -99,11 +99,11 @@
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="90"/>
             </Grid.RowDefinitions>
 
             <!-- Title Bar -->
@@ -213,22 +213,29 @@
                                   Icon="{StaticResource MultipleFilesIcon}" />
                         <Separator Template="{StaticResource MenuSep}" />
                         <MenuItem Header="_Recently Played"
-                                  IsEnabled="{Binding RecentIsNotEmpty}"
                                   InputGestureText=">"
-                                  Command="{Binding PlayRecentCommand}"
-                                  ItemsSource="{Binding Path=RecentMediaFiles}"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource RecentIcon}">
-                            <MenuItem.ItemContainerStyle>
-                                <Style TargetType="MenuItem">
-                                     <!--Style properties--> 
-                                    <Setter Property="Margin" Value="0,5,5,5"/>
-                                    <Setter Property="Foreground" Value="#fff"/>
-                                    <Setter Property="Header" Value="{Binding FilePath}" />
-                                     <!--Commands--> 
-                                    <Setter Property="Command" Value="{Binding PlayRecentCommand}" />
-                                </Style>
-                            </MenuItem.ItemContainerStyle>
+                            <ListView
+                                ItemsSource="{Binding RecentMediaFiles}">
+                                <ListView.Resources>
+                                    <Style TargetType="ListView">
+                                        
+                                        <Setter Property="Margin" Value="0,0,0,0"/>
+                                        <Setter Property="Padding" Value="0,0,0,0" />
+                                        <Setter Property="Background" Value="{StaticResource LightDarkBlueBackgroundBrush}" />
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <MenuItem Header="{Binding FilePath}" 
+                                                      Command="{Binding PlayRecentCommand}"
+                                                      Template="{StaticResource SubMenu}"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <MenuItem Header="Clear" 
+                                      Template="{StaticResource SubMenu}"/>
                         </MenuItem>
                         <MenuItem Header="_Exit" 
                                   InputGestureText="Ctrl+Q"
@@ -328,33 +335,63 @@
             </Grid>
 
             <!-- Playback and Audio Controls -->
-            <Grid Grid.Row="4" Margin="10,15,15,10">
+            <Grid Grid.Row="4" Margin="30,3,30,3">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="240"/>
                 </Grid.ColumnDefinitions>
                  
                 <!--- Info control -->
-                <StackPanel Grid.Column="0">
-                    <TextBlock  Text="INFO CONTROLS"
-                                FontSize="{StaticResource FontSizeSmall}"
-                                Foreground="{StaticResource ForegroundLightBrush}" />
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource PlaylistIcon}" />
+                    </Button>
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource HelpIcon}" />
+                    </Button>
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource FullscreenIcon}" />
+                    </Button>
                 </StackPanel>
                 
                 <!-- Playback control -->
-                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                    <TextBlock  Text="PLAYBACK CONTROLS"
-                                FontSize="{StaticResource FontSizeSmall}"
-                                Foreground="{StaticResource ForegroundLightBrush}" />
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource PrevIcon}" />
+                    </Button>
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource BackwardIcon}" />
+                    </Button>
+                    <Button Style="{StaticResource PlayButtonControl}">
+                        <Image Source="{StaticResource PlayIcon}" />
+                    </Button>
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource ForwardIcon}" />
+                    </Button>
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource NextIcon}" />
+                    </Button>
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource StopIcon}" />
+                    </Button>
                 </StackPanel>
                 
                 <!--- Audio control -->
-                <StackPanel Grid.Column="2"  HorizontalAlignment="Right" > 
-                    <TextBlock
-                                Text="AUDIO CONTROLS"
-                                FontSize="{StaticResource FontSizeSmall}"
-                                Foreground="{StaticResource ForegroundLightBrush}" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource DecreaseIcon}" 
+                               Width="30" Height="30"/>
+                    </Button>
+                    <ProgressBar 
+                        Width="100"
+                        Height="10"
+                        Margin="5,0,5,0"
+                        Value="100"/>
+                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                        <Image Source="{StaticResource IncreaseIcon}" 
+                               Width="30" Height="30"/>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Grid>

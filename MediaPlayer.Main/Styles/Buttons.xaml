@@ -4,6 +4,7 @@
         <!-- Order is significant -->
         <ResourceDictionary Source="Colors.xaml"/>
         <ResourceDictionary Source="Fonts.xaml" />
+        <ResourceDictionary Source="ImageResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="WindowsControlButtonStyles" TargetType="Button">
@@ -51,6 +52,61 @@
                 <Setter Property="Foreground" Value="{StaticResource ForegroundLightBrush}"/>
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Button" x:Key="PlayBackSectionControlsBase">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Margin" Value="3,0,3,0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="BorderThickness" Value="0"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"  Value="True">
+                <Setter Property="Background" Value="#0C1017"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Button" x:Key="PlayBackSectionButtons" BasedOn="{StaticResource PlayBackSectionControlsBase}">
+        <Setter Property="Width" Value="45" />
+        <Setter Property="Height" Value="45" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                        <ContentPresenter 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Center"
+                            Width="35"
+                            Height="35"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+    </Style>
+
+    <Style TargetType="Button" x:Key="PlayButtonControl" BasedOn="{StaticResource PlayBackSectionControlsBase}">
+        <Setter Property="Width" Value="50" />
+        <Setter Property="Height" Value="50" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" 
+                            Padding="0.5"
+                            BorderThickness="0">
+                        <ContentPresenter 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Center"
+                            Width="50"
+                            Height="50"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </ResourceDictionary>
