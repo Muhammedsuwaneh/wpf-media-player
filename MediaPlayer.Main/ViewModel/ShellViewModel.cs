@@ -7,6 +7,7 @@ using System.Linq;
 using System.IO;
 using System.Reflection;
 using System;
+using System.Windows.Media;
 using Autofac;
 using System.Collections.ObjectModel;
 
@@ -58,6 +59,8 @@ namespace MediaPlayer
 
         public string FilePath { get; set; }
 
+        public int currentVolumePosition { get; set; } = 0;
+
         /// <summary>
         /// Recently played media files property 
         /// </summary>
@@ -80,6 +83,27 @@ namespace MediaPlayer
                 {
                     _RecentMediaFiles = value;
                     OnPropertyChanged("RecentMediaFiles");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Media Volume Control Collection
+        /// </summary>
+        private ObservableCollection<VolumeControl> _VolumeControlHeights { get; set; }
+        public ObservableCollection<VolumeControl> VolumeControlHeights
+        {
+            get
+            {
+                return _VolumeControlHeights;
+            }
+
+            set
+            {
+                if(_VolumeControlHeights != value)
+                {
+                    _VolumeControlHeights = value;
+                    OnPropertyChanged("VolumeControlHeights");
                 }
             }
         }
@@ -206,6 +230,16 @@ namespace MediaPlayer
             //// helps in resizing window 
             var resizer = new WindowResizer(_window);
 
+            // init volume values 
+            _VolumeControlHeights = new ObservableCollection<VolumeControl>();
+            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 10, VolumeBarFill = Brushes.Red });
+            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 20, VolumeBarFill = Brushes.Red });
+            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 30 });
+            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 40 });
+            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 50 });
+
+            currentVolumePosition = 3;
+
             ReloadRecentlyPlayed();
         }
 
@@ -308,6 +342,80 @@ namespace MediaPlayer
                     CurrentMediaPath = FilePath;
 
                     LoadMedia();
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Increase Volume Commands 
+        /// </summary>
+        private ICommand _IncreaseVolume { get; set; }
+        public ICommand IncreaseVolume
+        {
+            get 
+            {
+                return _IncreaseVolume ?? (_IncreaseVolume = new RelayCommand<object>(x =>
+                {
+                    if(currentVolumePosition-1 < VolumeControlHeights.Count)
+                    {
+                        double currentVolumePositionHeight = _VolumeControlHeights[currentVolumePosition-1].VolumeBarHeight;
+
+                        _VolumeControlHeights.RemoveAt(currentVolumePosition-1);
+
+                        _VolumeControlHeights.Insert(currentVolumePosition-1,
+                        new VolumeControl
+                        {
+                            VolumeBarHeight = currentVolumePositionHeight,
+                            VolumeBarFill = Brushes.Red
+                        });
+
+                        currentVolumePosition++;
+                    }
+
+                    else
+                    {
+                        // set current position to last bar 
+                        currentVolumePosition = _VolumeControlHeights.Count;
+
+                        // warn user 
+                        MessageBox.Show("Higher Volumes may damage your ears");
+                    }
+
+                }));
+            }
+        }
+
+        private ICommand _DecreaseVolume { get; set; }
+        public ICommand DecreaseVolume
+        {
+            get
+            {
+                return _DecreaseVolume ?? (_DecreaseVolume = new RelayCommand<object>(x =>
+                {
+                    if (currentVolumePosition-1 >= 0 && currentVolumePosition-1 < 5)
+                    {
+                        double currentVolumePositionHeight = _VolumeControlHeights[currentVolumePosition-1].VolumeBarHeight;
+
+                        _VolumeControlHeights.RemoveAt(currentVolumePosition-1);
+
+                        _VolumeControlHeights.Insert(currentVolumePosition-1,
+                        new VolumeControl
+                        {
+                            VolumeBarHeight = currentVolumePositionHeight,
+                            VolumeBarFill = Brushes.White
+                        });
+
+                        currentVolumePosition--;
+                    }
+
+                    else
+                    {
+                        // set current position to first bar
+                        currentVolumePosition = 1;
+
+                        // mute media 
+                    }
+
                 }));
             }
         }

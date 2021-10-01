@@ -134,7 +134,7 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Border>
-                
+
                 <!--- Empty draggable border-->
                 <Border Grid.Column="1">
                     <Border.Background>
@@ -220,7 +220,7 @@
                                 ItemsSource="{Binding RecentMediaFiles}">
                                 <ListView.Resources>
                                     <Style TargetType="ListView">
-                                        
+
                                         <Setter Property="Margin" Value="0,0,0,0"/>
                                         <Setter Property="Padding" Value="0,0,0,0" />
                                         <Setter Property="Background" Value="{StaticResource LightDarkBlueBackgroundBrush}" />
@@ -243,7 +243,7 @@
                                   Icon="{StaticResource ExitIcon}"
                                   Command="{Binding CloseWindow_Click}"/>
                     </MenuItem>
-                    
+
                     <!-- Playback -->
                     <MenuItem Header="_Playback" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Play" 
@@ -266,7 +266,7 @@
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource BackwardIcon}"/>
                     </MenuItem>
-                    
+
                     <!-- Audio -->
                     <MenuItem Header="_Audio" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Increase Volume" 
@@ -279,7 +279,7 @@
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource MuteIcon}"/>
                     </MenuItem>
-                    
+
                     <!-- Video -->
                     <MenuItem Header="_Video" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Fullscreen" 
@@ -287,14 +287,14 @@
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource FullscreenIcon}"/>
                     </MenuItem>
-                    
+
                     <!--- View -->
                     <MenuItem Header="_View" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Playlist" 
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource PlaylistIcon}"/>
                     </MenuItem>
-                    
+
                     <!-- Help -->
                     <MenuItem Header="_Help" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Shortcuts" 
@@ -319,12 +319,12 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <!--- Current media  progress -->
                 <TextBlock HorizontalAlignment="Left" Grid.Column="0" Text="---::---" 
                            FontSize="{StaticResource FontSizeRegular}"
                            Foreground="{StaticResource ForegroundLightBrush}"/>
-                
+
                 <!--- progress bar -->
                 <ProgressBar Grid.Column="1" Height="10" Width="auto"/>
 
@@ -337,11 +337,11 @@
             <!-- Playback and Audio Controls -->
             <Grid Grid.Row="4" Margin="30,3,30,3">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="240"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
-                 
+
                 <!--- Info control -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                     <Button Style="{StaticResource PlayBackSectionButtons}">
@@ -354,9 +354,11 @@
                         <Image Source="{StaticResource FullscreenIcon}" />
                     </Button>
                 </StackPanel>
-                
+
                 <!-- Playback control -->
-                <StackPanel Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel Grid.Column="1" 
+                            HorizontalAlignment="Center" 
+                            Orientation="Horizontal">
                     <Button Style="{StaticResource PlayBackSectionButtons}">
                         <Image Source="{StaticResource PrevIcon}" />
                     </Button>
@@ -376,19 +378,39 @@
                         <Image Source="{StaticResource StopIcon}" />
                     </Button>
                 </StackPanel>
-                
+
                 <!--- Audio control -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal" 
+                            VerticalAlignment="Center" 
+                            HorizontalAlignment="Right" >
+                    <Button Style="{StaticResource PlayBackSectionButtons}"
+                            Command="{Binding DecreaseVolume}">
                         <Image Source="{StaticResource DecreaseIcon}" 
                                Width="30" Height="30"/>
                     </Button>
-                    <ProgressBar 
-                        Width="100"
-                        Height="10"
-                        Margin="5,0,5,0"
-                        Value="100"/>
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                    <ItemsControl ItemsSource="{Binding VolumeControlHeights}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                </StackPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type local:VolumeControl}">
+                                <StackPanel Margin="0,0,0,30" Orientation="Horizontal">
+                                    <Rectangle 
+                                        VerticalAlignment="Bottom"
+                                        Margin="5,0,5,0"
+                                        Width="10"
+                                        Fill="{Binding VolumeBarFill}"
+                                        Height="{Binding VolumeBarHeight}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Button Style="{StaticResource PlayBackSectionButtons}"
+                            Command="{Binding IncreaseVolume}">
                         <Image Source="{StaticResource IncreaseIcon}" 
                                Width="30" Height="30"/>
                     </Button>

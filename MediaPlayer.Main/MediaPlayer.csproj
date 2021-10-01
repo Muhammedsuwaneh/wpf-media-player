@@ -117,6 +117,7 @@
     <Compile Include="Factory\ContainerConfig.cs" />
     <Compile Include="Factory\DataAccessFactory.cs" />
     <Compile Include="Factory\ViewsFactory.cs" />
+    <Compile Include="Models\VolumeControl.cs" />
     <Compile Include="ViewModel\IShellViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MediaBackgroundModelView.cs" />
@@ -228,7 +229,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
