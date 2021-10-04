@@ -10,6 +10,7 @@ using System;
 using System.Windows.Media;
 using Autofac;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace MediaPlayer
 {
@@ -44,11 +45,6 @@ namespace MediaPlayer
         };
 
         /// <summary>
-        /// Store current media path for future use 
-        /// </summary>
-        private string CurrentMediaPath { get; set; } = string.Empty;
-
-        /// <summary>
         /// Sets the window radius 
         /// </summary>
         private int _WindowRadius { get; set; } = 20;
@@ -57,9 +53,111 @@ namespace MediaPlayer
 
         #region Public Properties 
 
-        public string FilePath { get; set; }
+        private int currentVolumePosition { get; set; } = 0;
+        private int oldVolumePosition { get; set; } = 0;
 
-        public int currentVolumePosition { get; set; } = 0;
+        /// <summary>
+        /// Media background visibility 
+        /// </summary>
+        private Visibility _BackgroundVisibility { get; set; } = Visibility.Visible;
+        public Visibility BackgroundVisibility
+        {
+            get { return _BackgroundVisibility; }
+            set
+            {
+                if (_BackgroundVisibility != value)
+                {
+                    _BackgroundVisibility = value;
+                    OnPropertyChanged("MediaVisibility");
+                }
+            }
+        }
+
+        private Visibility _MediaVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility MediaVisibility
+        {
+            get { return _MediaVisibility; }
+            set
+            {
+                if (_MediaVisibility != value)
+                {
+                    _MediaVisibility = value;
+                    OnPropertyChanged("MediaVisibility");
+                }
+            }
+        }
+        public string MediaUrlToBeStored { get; set; }
+
+        private MediaState _Load { get; set; } = MediaState.Manual;
+        public MediaState Load
+        {
+            get { return _Load; }
+            set
+            {
+                if (_Load != value)
+                {
+                    _Load = value;
+                    OnPropertyChanged("Load");
+                }
+            }
+        }
+
+        private Stretch _AspectRatio { get; set; } = Stretch.Uniform;
+        public Stretch AspectRatio
+        {
+            get { return _AspectRatio; }
+            set
+            {
+                if (_AspectRatio != value)
+                {
+                    _AspectRatio = value;
+                    OnPropertyChanged("AspectRatio");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Current loaded media source
+        /// </summary>
+        private Uri _MediaSource { get; set; }
+
+        public Uri MediaSource
+        {
+            get { return _MediaSource; }
+            set
+            {
+                if (_MediaSource != value)
+                {
+                    _MediaSource = value;
+                    OnPropertyChanged("MediaSource");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Stores the old media volume in memory in
+        /// for later use once we unmute the media 
+        /// </summary>
+        private double OldMediaVolume { get; set; }
+
+        /// <summary>
+        /// default media volume
+        /// </summary>
+        private double _MediaVolume { get; set; } = 30;
+        public double MediaVolume
+        {
+            get { return _MediaVolume; }
+            set
+            {
+                if (_MediaVolume != value)
+                {
+                    _MediaVolume = value;
+                    OnPropertyChanged("MediaVolume");
+                }
+            }
+        }
+
+        private bool MediaIsPlaying { get; set; } = false;
 
         /// <summary>
         /// Recently played media files property 
@@ -100,13 +198,15 @@ namespace MediaPlayer
 
             set
             {
-                if(_VolumeControlHeights != value)
+                if (_VolumeControlHeights != value)
                 {
                     _VolumeControlHeights = value;
                     OnPropertyChanged("VolumeControlHeights");
                 }
             }
         }
+
+        SolidColorBrush VolumeBarColor = (SolidColorBrush)new BrushConverter().ConvertFromString("#0DCCFE");
 
         private bool _RecentIsNotEmpty { get; set; } = false;
 
@@ -147,25 +247,6 @@ namespace MediaPlayer
         ///  Corner radius
         /// </summary>
         public CornerRadius WindowCornerRadius { get { return new CornerRadius(WindowRadius); } }
-
-
-        /// <summary>
-        /// the current content control view 
-        /// </summary>
-        public CurrentViewType _CurrentView { get; set; } = CurrentViewType.MediaBackground;
-
-        public CurrentViewType CurrentView
-        {
-            get { return _CurrentView; }
-            set
-            {
-                if (_CurrentView != value)
-                {
-                    _CurrentView = value;
-                    OnPropertyChanged("CurrentView");
-                }
-            }
-        }
 
         #endregion
 
@@ -212,7 +293,14 @@ namespace MediaPlayer
 
         public ShellViewModel(string filePath)
         {
-            FilePath = filePath;
+            MediaUrlToBeStored = filePath;
+        }
+
+        public void WindowsInstance(Window window)
+        {
+            _window = window;
+
+            InitWindow();
         }
 
         /// <summary>
@@ -232,9 +320,10 @@ namespace MediaPlayer
 
             // init volume values 
             _VolumeControlHeights = new ObservableCollection<VolumeControl>();
-            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 10, VolumeBarFill = Brushes.Red });
-            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 20, VolumeBarFill = Brushes.Red });
-            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 30 });
+
+            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 10, VolumeBarFill = VolumeBarColor });
+            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 20, VolumeBarFill = VolumeBarColor });
+            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 30, VolumeBarFill = VolumeBarColor });
             _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 40 });
             _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 50 });
 
@@ -339,8 +428,6 @@ namespace MediaPlayer
             {
                 return _PlayRecentCommand ?? (_PlayRecentCommand = new RelayCommand<object>(x =>
                 {
-                    CurrentMediaPath = FilePath;
-
                     LoadMedia();
                 }));
             }
@@ -352,30 +439,36 @@ namespace MediaPlayer
         private ICommand _IncreaseVolume { get; set; }
         public ICommand IncreaseVolume
         {
-            get 
+            get
             {
                 return _IncreaseVolume ?? (_IncreaseVolume = new RelayCommand<object>(x =>
                 {
-                    if(currentVolumePosition-1 < VolumeControlHeights.Count)
+                    if (currentVolumePosition < VolumeControlHeights.Count)
                     {
-                        double currentVolumePositionHeight = _VolumeControlHeights[currentVolumePosition-1].VolumeBarHeight;
+                        double currentVolumePositionHeight = _VolumeControlHeights[currentVolumePosition].VolumeBarHeight;
 
-                        _VolumeControlHeights.RemoveAt(currentVolumePosition-1);
+                        _VolumeControlHeights.RemoveAt(currentVolumePosition);
 
-                        _VolumeControlHeights.Insert(currentVolumePosition-1,
+                        _VolumeControlHeights.Insert(currentVolumePosition,
                         new VolumeControl
                         {
                             VolumeBarHeight = currentVolumePositionHeight,
-                            VolumeBarFill = Brushes.Red
+                            VolumeBarFill = VolumeBarColor,
                         });
 
                         currentVolumePosition++;
+
+                        // increase media volume 
+                        _MediaVolume += 10;
                     }
 
                     else
                     {
                         // set current position to last bar 
                         currentVolumePosition = _VolumeControlHeights.Count;
+
+                        // set media volume to maximum 
+                        //if (MediaIsPlaying) MediaViewModel._MediaVolume = 50;
 
                         // warn user 
                         MessageBox.Show("Higher Volumes may damage your ears");
@@ -392,30 +485,90 @@ namespace MediaPlayer
             {
                 return _DecreaseVolume ?? (_DecreaseVolume = new RelayCommand<object>(x =>
                 {
-                    if (currentVolumePosition-1 >= 0 && currentVolumePosition-1 < 5)
+                    if (currentVolumePosition - 1 >= 0 && currentVolumePosition - 1 < 5)
                     {
-                        double currentVolumePositionHeight = _VolumeControlHeights[currentVolumePosition-1].VolumeBarHeight;
+                        // get current bar height 
+                        double currentVolumePositionHeight = _VolumeControlHeights[currentVolumePosition - 1].VolumeBarHeight;
 
-                        _VolumeControlHeights.RemoveAt(currentVolumePosition-1);
+                        // remove current bar 
+                        _VolumeControlHeights.RemoveAt(currentVolumePosition - 1);
 
-                        _VolumeControlHeights.Insert(currentVolumePosition-1,
+                        // replace current bar with a new volume bar
+                        _VolumeControlHeights.Insert(currentVolumePosition - 1,
                         new VolumeControl
                         {
                             VolumeBarHeight = currentVolumePositionHeight,
                             VolumeBarFill = Brushes.White
                         });
 
+                        // decrease count 
                         currentVolumePosition--;
+
+                        // reduce actual media volume 
+                        _MediaVolume -= 10;
                     }
 
                     else
                     {
                         // set current position to first bar
-                        currentVolumePosition = 1;
+                        currentVolumePosition = 0;
 
                         // mute media 
+                        _MediaVolume = 0;
                     }
 
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Mutes the media element 
+        /// </summary>
+        private ICommand _MuteMedia { get; set; }
+
+        public ICommand MuteMedia
+        {
+            get {
+                return _MuteMedia ?? (_MuteMedia = new RelayCommand<object>(x =>
+                {
+                    if (_MediaVolume > 0)
+                    {
+                        var temp = _VolumeControlHeights;
+
+                        OldMediaVolume = _MediaVolume;
+                        oldVolumePosition = currentVolumePosition;
+
+                        _MediaVolume = 0;
+                        currentVolumePosition = 0;
+
+                        // clear all highlighted volume bars
+                        _VolumeControlHeights.Clear();
+
+                        // insert new unhighlighted volume bars
+                        for(int i = 10; i < 60; i += 10)
+                        {
+                            _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = i, VolumeBarFill = Brushes.White });
+                        }
+                    }
+
+                    else
+                    {
+                        _MediaVolume = OldMediaVolume;
+
+                        int i = 0, height = 10;
+
+                        // restore volume bars
+                        while(i < oldVolumePosition)
+                        {
+                            _VolumeControlHeights.RemoveAt(i);
+                            _VolumeControlHeights.Insert(i, new VolumeControl { VolumeBarHeight = height, VolumeBarFill = VolumeBarColor });
+
+                            i++;
+                            height += 10;
+                        }
+
+                        currentVolumePosition = oldVolumePosition;
+                    }
                 }));
             }
         }
@@ -456,7 +609,7 @@ namespace MediaPlayer
 
                 else
                 {
-                    CurrentMediaPath = fileName;
+                    MediaUrlToBeStored = fileName;
                     return true;
                 }
             }
@@ -479,18 +632,23 @@ namespace MediaPlayer
         /// </summary>
         public void LoadMedia()
         {
-            // set media uri 
-            MediaViewModel._MediaSource = new Uri(CurrentMediaPath);
+            _MediaSource = new Uri(MediaUrlToBeStored);
 
             // Save current media to recently saved
-            DataAccessFactory.GetDataAccessInstance().WriteToFile(RecentMediaFileName, CurrentMediaPath);
+            DataAccessFactory.GetDataAccessInstance().WriteToFile(RecentMediaFileName, MediaUrlToBeStored);
 
-            // remove current media view for replays or viewing other media 
-            if (_CurrentView == CurrentViewType.Media)
-                _CurrentView = CurrentViewType.MediaBackground;
+            // display media 
+            if (_MediaVisibility != Visibility.Visible)
+                _MediaVisibility = Visibility.Visible;
 
-            // Switch to media view 
-            _CurrentView = CurrentViewType.Media;
+            // play current media 
+            _Load = MediaState.Play;
+
+            // hide background 
+            if (_BackgroundVisibility != Visibility.Collapsed)
+                _BackgroundVisibility = Visibility.Collapsed;
+
+            MediaIsPlaying = true;
         }
 
         /// <summary>

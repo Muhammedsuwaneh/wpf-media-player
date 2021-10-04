@@ -100,7 +100,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="90"/>
@@ -198,7 +198,7 @@
             </Grid>
 
             <!-- Menu Bar -->
-            <StackPanel Margin="20,0,20,0" Grid.Row="1">
+            <StackPanel Margin="20,0,20,0" Grid.Row="1" VerticalAlignment="Bottom">
                 <Menu IsMainMenu="True">
                     <!-- Media -->
                     <MenuItem Header="_Media" Template="{StaticResource MenuTop}">
@@ -227,8 +227,8 @@
                                     </Style>
                                 </ListView.Resources>
                                 <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <MenuItem Header="{Binding FilePath}" 
+                                    <DataTemplate DataType="{x:Type local:ShellViewModel}">
+                                        <MenuItem Header="{Binding MediaUrlToBeStored}" 
                                                       Command="{Binding PlayRecentCommand}"
                                                       Template="{StaticResource SubMenu}"/>
                                     </DataTemplate>
@@ -271,12 +271,15 @@
                     <MenuItem Header="_Audio" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Increase Volume" 
                                   Template="{StaticResource SubMenu}"
+                                  Command="{Binding IncreaseVolume}"
                                   Icon="{StaticResource IncreaseIcon}"/>
                         <MenuItem Header="_Decrease Volume" 
                                   Template="{StaticResource SubMenu}"
+                                  Command="{Binding DecreaseVolume}"
                                   Icon="{StaticResource DecreaseIcon}" />
                         <MenuItem Header="_Mute" 
                                   Template="{StaticResource SubMenu}"
+                                  Command="{Binding MuteMedia}"
                                   Icon="{StaticResource MuteIcon}"/>
                     </MenuItem>
 
@@ -310,7 +313,29 @@
             </StackPanel>
 
             <!-- Media Element -->
-            <Frame NavigationUIVisibility="Hidden" Grid.Row="2" Content="{Binding CurrentView, Converter={local:ApplicationPageValueConverter}}" />
+            <Grid Grid.Row="2" Background="{StaticResource DarkBackgroundBrush}">
+                <MediaElement 
+                        Visibility="{Binding MediaVisibility}"
+                        x:Name="MediaPlayerElement"
+                        Source="{Binding MediaSource}"
+                        Stretch="{Binding AspectRatio}"
+                        Volume="{Binding MediaVolume}"
+                        LoadedBehavior="{Binding Load}"
+                />
+                
+                <!-- Media Background-->
+                <Image Visibility="{Binding BackgroundVisibility}" 
+                         Source="{StaticResource Favicon}"  Width="70" Height="70"/>
+
+                <!--- Audio Spinner -->
+
+                <!-- Loading Spinner [For async request] -->
+                <!--
+                    <custom:LoadingSpinner Diameter="150" 
+                               Thickness="7"
+                               Color="{StaticResource LightDarkBlueBackgroundBrush}"
+                               IsLoading="{Binding MediaLoaded}"/>-->
+            </Grid>
 
             <!-- Progress Bar -->
             <Grid Grid.Row="3" Margin="10,15,15,10">
@@ -321,15 +346,15 @@
                 </Grid.ColumnDefinitions>
 
                 <!--- Current media  progress -->
-                <TextBlock HorizontalAlignment="Left" Grid.Column="0" Text="---::---" 
-                           FontSize="{StaticResource FontSizeRegular}"
+                <TextBlock HorizontalAlignment="Left" Grid.Column="0" Text="---:---" 
+                           FontSize="{StaticResource FontSizeSmall}"
                            Foreground="{StaticResource ForegroundLightBrush}"/>
 
                 <!--- progress bar -->
                 <ProgressBar Grid.Column="1" Height="10" Width="auto"/>
 
                 <!--- Media length -->
-                <TextBlock HorizontalAlignment="Right" Grid.Column="2" Text="---::---"
+                <TextBlock HorizontalAlignment="Right" Grid.Column="2" Text="---:---"
                            FontSize="{StaticResource FontSizeSmall}"
                            Foreground="{StaticResource ForegroundLightBrush}"/>
             </Grid>

@@ -120,28 +120,10 @@
     <Compile Include="Models\VolumeControl.cs" />
     <Compile Include="ViewModel\IShellViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\MediaBackgroundModelView.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="Views\Base\BaseView.cs" />
-    <Compile Include="Views\MediaBackgroundView.xaml.cs">
-      <DependentUpon>MediaBackgroundView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MediaView.xaml.cs">
-      <DependentUpon>MediaView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="NavigationTypes\CurrentViewType.cs" />
-    <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
     <Compile Include="ValueConverters\BaseValueConverters.cs" />
     <Compile Include="Window\IWindowResizer.cs" />
     <Compile Include="Window\WindowResizer.cs" />
-    <Page Include="Views\MediaBackgroundView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MediaView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -152,7 +134,6 @@
     </Compile>
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="EventHandlers\RelayCommand.cs" />
-    <Compile Include="ViewModel\MediaViewModel.cs" />
     <Compile Include="ViewModel\ShellViewModel.cs" />
     <Compile Include="ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -230,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />
+    <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Backward.png" />

@@ -61,7 +61,7 @@ namespace MediaPlayer
 
                 foreach (string line in data)
                 {
-                    IShellViewModel shell = new ShellViewModel(line);
+                    IShellViewModel shell = ViewsFactory.GetShellViewModelInstance(line);
 
                     shell._window = shellview;
 
