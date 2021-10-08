@@ -246,11 +246,13 @@
 
                     <!-- Playback -->
                     <MenuItem Header="_Playback" Template="{StaticResource MenuTop}">
-                        <MenuItem Header="_Play" 
+                        <MenuItem Header="{Binding CurrentPlaybackState}" 
+                                  Command="{Binding PlayCommand}"
                                   Template="{StaticResource SubMenu}"
-                                  Icon="{StaticResource PlayIcon}"/>
+                                  Icon="{Binding CurrentPlaybackIcon}"/>
                         <MenuItem Header="_Stop" 
                                   Template="{StaticResource SubMenu}"
+                                  Command="{Binding StopCommand}"
                                   Icon="{StaticResource StopIcon}" />
                         <Separator Template="{StaticResource MenuSep}" />
                         <MenuItem Header="_Next" 
@@ -390,8 +392,10 @@
                     <Button Style="{StaticResource PlayBackSectionButtons}">
                         <Image Source="{StaticResource BackwardIcon}" />
                     </Button>
-                    <Button Style="{StaticResource PlayButtonControl}">
-                        <Image Source="{StaticResource PlayIcon}" />
+                    <Button 
+                        Command="{Binding PlayCommand}"
+                        Style="{StaticResource PlayButtonControl}">
+                        <Image Source="{Binding CurrentPlaybackIcon}" />
                     </Button>
                     <Button Style="{StaticResource PlayBackSectionButtons}">
                         <Image Source="{StaticResource ForwardIcon}" />
@@ -399,7 +403,9 @@
                     <Button Style="{StaticResource PlayBackSectionButtons}">
                         <Image Source="{StaticResource NextIcon}" />
                     </Button>
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                    <Button
+                        Command="{Binding StopCommand}"
+                        Style="{StaticResource PlayBackSectionButtons}">
                         <Image Source="{StaticResource StopIcon}" />
                     </Button>
                 </StackPanel>

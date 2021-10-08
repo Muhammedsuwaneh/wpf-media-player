@@ -56,6 +56,21 @@ namespace MediaPlayer
         private int currentVolumePosition { get; set; } = 0;
         private int oldVolumePosition { get; set; } = 0;
 
+        private string _CurrentPlaybackState { get; set; } = "_Play";
+
+        public string CurrentPlaybackState
+        {
+            get { return _CurrentPlaybackState; }
+            set
+            {
+                if(_CurrentPlaybackState != value)
+                {
+                    _CurrentPlaybackState = value;
+                    OnPropertyChanged("CurrentPlaybackState");
+                }
+            }
+        }
+
         /// <summary>
         /// Media background visibility 
         /// </summary>
@@ -157,6 +172,7 @@ namespace MediaPlayer
             }
         }
 
+        private bool MediaIsLoaded { get; set; } = false;
         private bool MediaIsPlaying { get; set; } = false;
 
         /// <summary>
@@ -302,6 +318,23 @@ namespace MediaPlayer
 
             InitWindow();
         }
+        /// <summary>
+        /// Stores the current playback icon and it's
+        /// updated based on the media state 
+        /// </summary>
+        public string _CurrentPlaybackIcon { get; set; }
+        public string CurrentPlaybackIcon
+        {
+            get { return _CurrentPlaybackIcon; }
+            set
+            {
+                if (_CurrentPlaybackIcon != value)
+                {
+                    _CurrentPlaybackIcon = value;
+                    OnPropertyChanged("CurrentPlaybackIcon");
+                }
+            }
+        }
 
         /// <summary>
         /// Initilaizes window properties 
@@ -330,6 +363,8 @@ namespace MediaPlayer
             currentVolumePosition = 3;
 
             ReloadRecentlyPlayed();
+
+            _CurrentPlaybackIcon = ConvertImagePath("Play.png");
         }
 
         #endregion
@@ -445,6 +480,7 @@ namespace MediaPlayer
                 {
                     if (currentVolumePosition < VolumeControlHeights.Count)
                     {
+
                         double currentVolumePositionHeight = _VolumeControlHeights[currentVolumePosition].VolumeBarHeight;
 
                         _VolumeControlHeights.RemoveAt(currentVolumePosition);
@@ -468,7 +504,7 @@ namespace MediaPlayer
                         currentVolumePosition = _VolumeControlHeights.Count;
 
                         // set media volume to maximum 
-                        //if (MediaIsPlaying) MediaViewModel._MediaVolume = 50;
+                        //if (MediaIsLoaded) MediaViewModel._MediaVolume = 50;
 
                         // warn user 
                         MessageBox.Show("Higher Volumes may damage your ears");
@@ -528,7 +564,8 @@ namespace MediaPlayer
 
         public ICommand MuteMedia
         {
-            get {
+            get
+            {
                 return _MuteMedia ?? (_MuteMedia = new RelayCommand<object>(x =>
                 {
                     if (_MediaVolume > 0)
@@ -545,7 +582,7 @@ namespace MediaPlayer
                         _VolumeControlHeights.Clear();
 
                         // insert new unhighlighted volume bars
-                        for(int i = 10; i < 60; i += 10)
+                        for (int i = 10; i < 60; i += 10)
                         {
                             _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = i, VolumeBarFill = Brushes.White });
                         }
@@ -558,7 +595,7 @@ namespace MediaPlayer
                         int i = 0, height = 10;
 
                         // restore volume bars
-                        while(i < oldVolumePosition)
+                        while (i < oldVolumePosition)
                         {
                             _VolumeControlHeights.RemoveAt(i);
                             _VolumeControlHeights.Insert(i, new VolumeControl { VolumeBarHeight = height, VolumeBarFill = VolumeBarColor });
@@ -569,6 +606,88 @@ namespace MediaPlayer
 
                         currentVolumePosition = oldVolumePosition;
                     }
+                }));
+            }
+        }
+
+        private ICommand _PlayCommand { get; set; }
+
+        public ICommand PlayCommand
+        {
+            get
+            {
+                return _PlayCommand ?? (_PlayCommand = new RelayCommand<object>(x =>
+                {
+
+                    // only perform pause and play operations when their a current media 
+                    if (MediaIsLoaded)
+                    {
+                        // pause
+                        if (MediaIsPlaying)
+                        {
+                            // pause media 
+                            _Load = MediaState.Pause;
+
+                            MediaIsPlaying = false;
+
+                            // update playback icon
+                            _CurrentPlaybackIcon = ConvertImagePath("Play.png");
+
+                            // current playback menu label 
+                            _CurrentPlaybackState = "_Play";
+                        }
+
+                        else
+                        {
+                            // play media 
+                            _Load = MediaState.Play;
+
+                            MediaIsPlaying = true;
+
+                            // update current playback icon
+                            _CurrentPlaybackIcon = ConvertImagePath("Pause.png");
+
+                            // update current playback menu label 
+                            _CurrentPlaybackState = "_Pause";
+                        }
+                    }
+
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Handles the stop media event 
+        /// </summary>
+        private ICommand _StopCommand { get; set; }
+        public ICommand StopCommand
+        {
+            get
+            {
+                return _StopCommand ?? (_StopCommand = new RelayCommand<object>(x =>
+                {
+                     if(MediaIsLoaded || MediaIsPlaying)
+                     {
+                        // stop media 
+                        _Load = MediaState.Close;
+
+                        // hide media 
+                        _MediaVisibility = Visibility.Collapsed;
+
+                        // show media background 
+                        _BackgroundVisibility = Visibility.Visible;
+
+                        // update playback icon 
+                        _CurrentPlaybackIcon = ConvertImagePath("Play.png");
+
+                        // Media is no longer playing 
+                        MediaIsLoaded = false;
+                        MediaIsPlaying = false;
+
+                        _CurrentPlaybackState = "_Play";
+
+                        // update progress bar 
+                     }
                 }));
             }
         }
@@ -616,6 +735,10 @@ namespace MediaPlayer
 
             return false;
         }
+        private string ConvertImagePath(string imageName)
+        {
+            return "pack://application:,,,/MediaPlayer;component/Assets/" + imageName.ToString();
+        }
 
         /// <summary>
         /// checks if current selected file is an empty file or not
@@ -648,7 +771,13 @@ namespace MediaPlayer
             if (_BackgroundVisibility != Visibility.Collapsed)
                 _BackgroundVisibility = Visibility.Collapsed;
 
+            MediaIsLoaded = true;
+
             MediaIsPlaying = true;
+
+            _CurrentPlaybackIcon = ConvertImagePath("Pause.png");
+
+            _CurrentPlaybackState = "_Pause";
         }
 
         /// <summary>
