@@ -251,6 +251,10 @@
     <Resource Include="Assets\Developer.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MediaPlayer.CustomProgressBar\MediaPlayer.CustomProgressBar.csproj">
+      <Project>{4457a4fd-5466-45bd-b12a-92da0141c10f}</Project>
+      <Name>MediaPlayer.CustomProgressBar</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MediaPlayer.LoadingSpinnerControl\MediaPlayer.LoadingSpinnerControl.csproj">
       <Project>{a83c867c-de34-496e-a41d-bea143bff7f6}</Project>
       <Name>MediaPlayer.LoadingSpinnerControl</Name>

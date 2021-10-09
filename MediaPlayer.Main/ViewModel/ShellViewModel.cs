@@ -9,8 +9,10 @@ using System.Reflection;
 using System;
 using System.Windows.Media;
 using Autofac;
+using MediaPlayer.CustomProgressBar;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace MediaPlayer
 {
@@ -27,11 +29,6 @@ namespace MediaPlayer
         private string RecentMediaFileName { get; set; } = @"Recent.dat";
 
         /// <summary>
-        /// Current window to be set
-        /// </summary>
-        public Window _window { get; set; }
-
-        /// <summary>
         /// Supported media 
         /// </summary>
         private static string[] SupportedFileTypes = new string[]
@@ -44,17 +41,97 @@ namespace MediaPlayer
             ".mkv",
         };
 
+
+        /// <summary>
+        /// current media time 
+        /// </summary>
+        private double CurrentTimeSpan { get; set; }
+
+        /// <summary>
+        /// Total media time span 
+        /// </summary>
+        private double TotalTimeSpan { get; set; }
+
         /// <summary>
         /// Sets the window radius 
         /// </summary>
         private int _WindowRadius { get; set; } = 20;
 
+        /// <summary>
+        /// Media Element to load media files
+        /// </summary>
+        private MediaElement _MediaPlayerElement { get; set; }
+
+        public MediaElement MediaPlayerElement
+        {
+            get { return _MediaPlayerElement; }
+            set
+            {
+                if (_MediaPlayerElement != value)
+                {
+                    _MediaPlayerElement = value;
+                    OnPropertyChanged("MediaPlayerElement");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Progress Bar Length
+        /// </summary>
+        private double _BarLength { get; set; }
+        public double BarLength
+        {
+            get { return _BarLength; }
+            set
+            {
+                if (_BarLength != value)
+                {
+                    _BarLength = value;
+                    OnPropertyChanged("BarLength");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Current media progress length
+        /// </summary>
+        private double _ProgressBarLength { get; set; }
+        public double ProgressBarLength
+        {
+            get { return _ProgressBarLength; }
+            set
+            {
+                if (_ProgressBarLength != value)
+                {
+                    _ProgressBarLength = value;
+                    OnPropertyChanged("ProgressBarLength");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Current volume position
+        /// </summary>
+        private int currentVolumePosition { get; set; } = 0;
+
+        /// <summary>
+        /// old volume position - for future reference
+        /// </summary>
+        private int oldVolumePosition { get; set; } = 0;
+
+        /// <summary>
+        /// Current media progress
+        /// </summary>
+        private double MediaProgress { get; set; }
+
         #endregion
 
         #region Public Properties 
 
-        private int currentVolumePosition { get; set; } = 0;
-        private int oldVolumePosition { get; set; } = 0;
+        /// <summary>
+        /// Current window to be set
+        /// </summary>
+        public Window _window { get; set; }
 
         private string _CurrentPlaybackState { get; set; } = "_Play";
 
@@ -63,7 +140,7 @@ namespace MediaPlayer
             get { return _CurrentPlaybackState; }
             set
             {
-                if(_CurrentPlaybackState != value)
+                if (_CurrentPlaybackState != value)
                 {
                     _CurrentPlaybackState = value;
                     OnPropertyChanged("CurrentPlaybackState");
@@ -83,71 +160,48 @@ namespace MediaPlayer
                 if (_BackgroundVisibility != value)
                 {
                     _BackgroundVisibility = value;
-                    OnPropertyChanged("MediaVisibility");
-                }
-            }
-        }
-
-        private Visibility _MediaVisibility { get; set; } = Visibility.Collapsed;
-        public Visibility MediaVisibility
-        {
-            get { return _MediaVisibility; }
-            set
-            {
-                if (_MediaVisibility != value)
-                {
-                    _MediaVisibility = value;
-                    OnPropertyChanged("MediaVisibility");
-                }
-            }
-        }
-        public string MediaUrlToBeStored { get; set; }
-
-        private MediaState _Load { get; set; } = MediaState.Manual;
-        public MediaState Load
-        {
-            get { return _Load; }
-            set
-            {
-                if (_Load != value)
-                {
-                    _Load = value;
-                    OnPropertyChanged("Load");
-                }
-            }
-        }
-
-        private Stretch _AspectRatio { get; set; } = Stretch.Uniform;
-        public Stretch AspectRatio
-        {
-            get { return _AspectRatio; }
-            set
-            {
-                if (_AspectRatio != value)
-                {
-                    _AspectRatio = value;
-                    OnPropertyChanged("AspectRatio");
+                    OnPropertyChanged("BackgroundVisibility");
                 }
             }
         }
 
         /// <summary>
-        /// Current loaded media source
+        /// Media time elasped 
         /// </summary>
-        private Uri _MediaSource { get; set; }
+        private string _TimeElasped { get; set; } = "--::--";
 
-        public Uri MediaSource
+        public string TimeElasped
         {
-            get { return _MediaSource; }
+            get { return _TimeElasped; }
             set
             {
-                if (_MediaSource != value)
+                if (_TimeElasped != value)
                 {
-                    _MediaSource = value;
-                    OnPropertyChanged("MediaSource");
+                    _TimeElasped = value;
+                    OnPropertyChanged("TimeElasped");
                 }
             }
         }
+
+        /// <summary>
+        /// Total Media Time 
+        /// </summary>
+        private string _TotalMediaTime { get; set; } = "--::--";
+
+        public string TotalMediaTime
+        {
+            get { return _TotalMediaTime; }
+            set
+            {
+                if (_TotalMediaTime != value)
+                {
+                    _TotalMediaTime = value;
+                    OnPropertyChanged("TotalMediaTime");
+                }
+            }
+        }
+
+        public string MediaUrlToBeStored { get; set; }
 
         /// <summary>
         /// Stores the old media volume in memory in
@@ -155,24 +209,21 @@ namespace MediaPlayer
         /// </summary>
         private double OldMediaVolume { get; set; }
 
-        /// <summary>
-        /// default media volume
-        /// </summary>
-        private double _MediaVolume { get; set; } = 30;
-        public double MediaVolume
+        private Thickness _SliderPosition { get; set; }
+
+        public Thickness SliderPosition
         {
-            get { return _MediaVolume; }
+            get { return _SliderPosition; }
             set
             {
-                if (_MediaVolume != value)
+                if (_SliderPosition != value)
                 {
-                    _MediaVolume = value;
-                    OnPropertyChanged("MediaVolume");
+                    _SliderPosition = value;
+                    OnPropertyChanged("SliderPosition");
                 }
             }
         }
 
-        private bool MediaIsLoaded { get; set; } = false;
         private bool MediaIsPlaying { get; set; } = false;
 
         /// <summary>
@@ -222,8 +273,14 @@ namespace MediaPlayer
             }
         }
 
+        /// <summary>
+        /// Color for volume bar background
+        /// </summary>
         SolidColorBrush VolumeBarColor = (SolidColorBrush)new BrushConverter().ConvertFromString("#0DCCFE");
 
+        /// <summary>
+        /// Indicates if recently played media is empty 
+        /// </summary>
         private bool _RecentIsNotEmpty { get; set; } = false;
 
         public bool RecentIsNotEmpty
@@ -256,6 +313,24 @@ namespace MediaPlayer
             set
             {
                 _WindowRadius = value;
+            }
+        }
+
+        /// <summary>
+        /// Stores the current playback icon and it's
+        /// updated based on the media state 
+        /// </summary>
+        public string _CurrentPlaybackIcon { get; set; }
+        public string CurrentPlaybackIcon
+        {
+            get { return _CurrentPlaybackIcon; }
+            set
+            {
+                if (_CurrentPlaybackIcon != value)
+                {
+                    _CurrentPlaybackIcon = value;
+                    OnPropertyChanged("CurrentPlaybackIcon");
+                }
             }
         }
 
@@ -318,23 +393,6 @@ namespace MediaPlayer
 
             InitWindow();
         }
-        /// <summary>
-        /// Stores the current playback icon and it's
-        /// updated based on the media state 
-        /// </summary>
-        public string _CurrentPlaybackIcon { get; set; }
-        public string CurrentPlaybackIcon
-        {
-            get { return _CurrentPlaybackIcon; }
-            set
-            {
-                if (_CurrentPlaybackIcon != value)
-                {
-                    _CurrentPlaybackIcon = value;
-                    OnPropertyChanged("CurrentPlaybackIcon");
-                }
-            }
-        }
 
         /// <summary>
         /// Initilaizes window properties 
@@ -354,6 +412,7 @@ namespace MediaPlayer
             // init volume values 
             _VolumeControlHeights = new ObservableCollection<VolumeControl>();
 
+            // set default volume bars
             _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 10, VolumeBarFill = VolumeBarColor });
             _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 20, VolumeBarFill = VolumeBarColor });
             _VolumeControlHeights.Add(new VolumeControl { VolumeBarHeight = 30, VolumeBarFill = VolumeBarColor });
@@ -362,9 +421,73 @@ namespace MediaPlayer
 
             currentVolumePosition = 3;
 
+            // reload recently played media files to menu item list 
             ReloadRecentlyPlayed();
 
+            // set default playback play icon to play 
             _CurrentPlaybackIcon = ConvertImagePath("Play.png");
+
+            // controls length of based based on window's size
+            _BarLength = _window.Width - 140;
+
+            // set slider position - to be updated once media is played or user manually slides it 
+            _SliderPosition = new Thickness(-1, 0, 0, 0);
+
+            // set media element instance 
+            _MediaPlayerElement = new MediaElement();
+
+            // set media element default aspect ratio
+            _MediaPlayerElement.Stretch = Stretch.Uniform;
+
+            // set default media volume
+            _MediaPlayerElement.Volume = 30;
+
+            // start time dispatcher
+            DispatcherTimer Timer = new DispatcherTimer();
+
+            // start in 1s 
+            Timer.Interval = TimeSpan.FromSeconds(1);
+
+            // tick clock 
+            Timer.Tick += Timer_Tick;
+
+            // Start clock
+            Timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // only update progress once media is loaded and playing
+            if (_MediaPlayerElement.Source != null && _MediaPlayerElement.IsLoaded == true
+                && MediaIsPlaying == true && _MediaPlayerElement.NaturalDuration.HasTimeSpan == true)
+            {
+                CurrentTimeSpan = _MediaPlayerElement.Position.TotalSeconds;
+                TotalTimeSpan = _MediaPlayerElement.NaturalDuration.TimeSpan.TotalSeconds;
+
+                TimeSpan elasped = TimeSpan.FromSeconds(CurrentTimeSpan);
+                TimeSpan total = TimeSpan.FromSeconds(TotalTimeSpan);
+
+                // set time elasped format
+                _TimeElasped = FormatTime(elasped);
+
+                // set total time format
+                _TotalMediaTime = FormatTime(total);
+
+                // get current progress
+                MediaProgress = (double)(CurrentTimeSpan / TotalTimeSpan) * GetBarLength();
+
+                // update slider position
+                if (CurrentTimeSpan >= TotalTimeSpan)
+                {
+                    // stop video once it is finished 
+                    StopMedia();
+                }
+
+                else _SliderPosition = new Thickness(MediaProgress, 0, 0, 0);
+
+                // update progress 
+                _ProgressBarLength = MediaProgress;
+            }
         }
 
         #endregion
@@ -381,7 +504,10 @@ namespace MediaPlayer
                 return WindowDragCommand ?? (WindowDragCommand = new RelayCommand<MouseButtonEventArgs>(x =>
                 {
                     if (x.ClickCount == 2)
+                    {
                         _window.WindowState ^= WindowState.Maximized;
+                        _BarLength = GetBarLength();
+                    }
                     else
                         _window.DragMove();
 
@@ -412,6 +538,9 @@ namespace MediaPlayer
                 return MaximizeCommand ?? (MaximizeCommand = new RelayCommand<object>(x =>
                 {
                     _window.WindowState ^= WindowState.Maximized;
+
+                    _BarLength = GetBarLength();
+
                 }));
             }
         }
@@ -495,7 +624,7 @@ namespace MediaPlayer
                         currentVolumePosition++;
 
                         // increase media volume 
-                        _MediaVolume += 10;
+                        _MediaPlayerElement.Volume += 10;
                     }
 
                     else
@@ -504,7 +633,6 @@ namespace MediaPlayer
                         currentVolumePosition = _VolumeControlHeights.Count;
 
                         // set media volume to maximum 
-                        //if (MediaIsLoaded) MediaViewModel._MediaVolume = 50;
 
                         // warn user 
                         MessageBox.Show("Higher Volumes may damage your ears");
@@ -541,7 +669,7 @@ namespace MediaPlayer
                         currentVolumePosition--;
 
                         // reduce actual media volume 
-                        _MediaVolume -= 10;
+                        _MediaPlayerElement.Volume -= 10;
                     }
 
                     else
@@ -550,7 +678,7 @@ namespace MediaPlayer
                         currentVolumePosition = 0;
 
                         // mute media 
-                        _MediaVolume = 0;
+                        _MediaPlayerElement.Volume = 0;
                     }
 
                 }));
@@ -568,14 +696,14 @@ namespace MediaPlayer
             {
                 return _MuteMedia ?? (_MuteMedia = new RelayCommand<object>(x =>
                 {
-                    if (_MediaVolume > 0)
+                    if (_MediaPlayerElement.Volume > 0)
                     {
                         var temp = _VolumeControlHeights;
 
-                        OldMediaVolume = _MediaVolume;
+                        OldMediaVolume = _MediaPlayerElement.Volume;
                         oldVolumePosition = currentVolumePosition;
 
-                        _MediaVolume = 0;
+                        _MediaPlayerElement.Volume = 0;
                         currentVolumePosition = 0;
 
                         // clear all highlighted volume bars
@@ -590,7 +718,7 @@ namespace MediaPlayer
 
                     else
                     {
-                        _MediaVolume = OldMediaVolume;
+                        _MediaPlayerElement.Volume = OldMediaVolume;
 
                         int i = 0, height = 10;
 
@@ -610,6 +738,9 @@ namespace MediaPlayer
             }
         }
 
+        /// <summary>
+        /// Plays/pauses current media 
+        /// </summary>
         private ICommand _PlayCommand { get; set; }
 
         public ICommand PlayCommand
@@ -620,13 +751,13 @@ namespace MediaPlayer
                 {
 
                     // only perform pause and play operations when their a current media 
-                    if (MediaIsLoaded)
+                    if (_MediaPlayerElement.Source != null)
                     {
                         // pause
                         if (MediaIsPlaying)
                         {
                             // pause media 
-                            _Load = MediaState.Pause;
+                            _MediaPlayerElement.LoadedBehavior = MediaState.Pause;
 
                             MediaIsPlaying = false;
 
@@ -640,7 +771,7 @@ namespace MediaPlayer
                         else
                         {
                             // play media 
-                            _Load = MediaState.Play;
+                            _MediaPlayerElement.LoadedBehavior = MediaState.Play;
 
                             MediaIsPlaying = true;
 
@@ -666,28 +797,8 @@ namespace MediaPlayer
             {
                 return _StopCommand ?? (_StopCommand = new RelayCommand<object>(x =>
                 {
-                     if(MediaIsLoaded || MediaIsPlaying)
-                     {
-                        // stop media 
-                        _Load = MediaState.Close;
-
-                        // hide media 
-                        _MediaVisibility = Visibility.Collapsed;
-
-                        // show media background 
-                        _BackgroundVisibility = Visibility.Visible;
-
-                        // update playback icon 
-                        _CurrentPlaybackIcon = ConvertImagePath("Play.png");
-
-                        // Media is no longer playing 
-                        MediaIsLoaded = false;
-                        MediaIsPlaying = false;
-
-                        _CurrentPlaybackState = "_Play";
-
-                        // update progress bar 
-                     }
+                    // close current media 
+                    StopMedia();
                 }));
             }
         }
@@ -735,9 +846,69 @@ namespace MediaPlayer
 
             return false;
         }
+
+        /// <summary>
+        /// returns an asset's entire path 
+        /// </summary>
+        /// <param name="imageName"></param>
+        /// <returns></returns>
         private string ConvertImagePath(string imageName)
         {
             return "pack://application:,,,/MediaPlayer;component/Assets/" + imageName.ToString();
+        }
+
+        /// <summary>
+        /// Stops the current media 
+        /// </summary>
+        private void StopMedia()
+        {
+            if (_MediaPlayerElement.IsLoaded && MediaIsPlaying)
+            {
+                ResetMedia();
+
+                // show media background 
+                _BackgroundVisibility = Visibility.Visible;
+
+                // update playback icon 
+                _CurrentPlaybackIcon = ConvertImagePath("Play.png");
+
+                _CurrentPlaybackState = "_Play";
+
+                // update volume labels
+                _TimeElasped = "--::--";
+                _TotalMediaTime = "--::--";
+
+                // update progress bar 
+                _ProgressBarLength = .0;
+                _SliderPosition = new Thickness(0, 0, 0, 0);
+            }
+        }
+
+        /// <summary>
+        /// Resets the media properties
+        /// </summary>
+        private void ResetMedia()
+        {
+            // stop media 
+            _MediaPlayerElement.LoadedBehavior = MediaState.Close;
+
+            // hide media 
+            _MediaPlayerElement.Visibility = Visibility.Collapsed;
+
+            // Media is no longer playing 
+            MediaIsPlaying = false;
+
+            // reset current time spans
+            CurrentTimeSpan = 0;
+
+            // reset total time spans
+            TotalTimeSpan = 0;
+
+            // reset media progress
+            MediaProgress = 0;
+
+            // reset source
+            _MediaPlayerElement.Source = null;
         }
 
         /// <summary>
@@ -755,23 +926,21 @@ namespace MediaPlayer
         /// </summary>
         public void LoadMedia()
         {
-            _MediaSource = new Uri(MediaUrlToBeStored);
+            _MediaPlayerElement.Source = new Uri(MediaUrlToBeStored);
 
             // Save current media to recently saved
             DataAccessFactory.GetDataAccessInstance().WriteToFile(RecentMediaFileName, MediaUrlToBeStored);
 
             // display media 
-            if (_MediaVisibility != Visibility.Visible)
-                _MediaVisibility = Visibility.Visible;
+            if (_MediaPlayerElement.Visibility != Visibility.Visible)
+                _MediaPlayerElement.Visibility = Visibility.Visible;
 
             // play current media 
-            _Load = MediaState.Play;
+            _MediaPlayerElement.LoadedBehavior = MediaState.Play;
 
             // hide background 
             if (_BackgroundVisibility != Visibility.Collapsed)
                 _BackgroundVisibility = Visibility.Collapsed;
-
-            MediaIsLoaded = true;
 
             MediaIsPlaying = true;
 
@@ -779,6 +948,18 @@ namespace MediaPlayer
 
             _CurrentPlaybackState = "_Pause";
         }
+
+        /// <summary>
+        /// Formats time
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        private string FormatTime(TimeSpan time)
+        {
+            return string.Format("{0:D2}:{1:D2}:{2:D2}",
+                    time.Hours, time.Minutes, time.Seconds);
+        }
+
 
         /// <summary>
         /// Loads the recently with file path data 
@@ -790,6 +971,15 @@ namespace MediaPlayer
 
             // check if recent data is empty 
             _RecentIsNotEmpty = _RecentMediaFiles.Count > 0;
+        }
+
+        /// <summary>
+        /// returns the progress bar length
+        /// </summary>
+        /// <returns></returns>
+        private double GetBarLength()
+        {
+            return _window.Width - 140;
         }
 
         /// <summary>

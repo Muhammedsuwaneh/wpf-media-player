@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace MediaPlayer
 {
@@ -11,26 +9,28 @@ namespace MediaPlayer
     {
         string _CurrentPlaybackIcon { get; set; }
         Window _window { get; set; }
-        Stretch AspectRatio { get; set; }
         Visibility BackgroundVisibility { get; set; }
+        double BarLength { get; set; }
         ICommand CloseWindow_Click { get; }
         string CurrentPlaybackIcon { get; set; }
+        string CurrentPlaybackState { get; set; }
         ICommand DecreaseVolume { get; }
         ICommand IncreaseVolume { get; }
-        MediaState Load { get; set; }
         ICommand MaximizeWindow_Click { get; }
-        Uri MediaSource { get; set; }
+        MediaElement MediaPlayerElement { get; set; }
         string MediaUrlToBeStored { get; set; }
-        Visibility MediaVisibility { get; set; }
-        double MediaVolume { get; set; }
         ICommand MinimizeWindow_Click { get; }
         ICommand MuteMedia { get; }
         ICommand OpenFile_Click { get; }
         ICommand PlayCommand { get; }
         ICommand PlayRecentCommand { get; }
-        ICommand StopCommand { get; }
+        double ProgressBarLength { get; set; }
         bool RecentIsNotEmpty { get; set; }
         ObservableCollection<IShellViewModel> RecentMediaFiles { get; set; }
+        Thickness SliderPosition { get; set; }
+        ICommand StopCommand { get; }
+        string TimeElasped { get; set; }
+        string TotalMediaTime { get; set; }
         ObservableCollection<VolumeControl> VolumeControlHeights { get; set; }
         ICommand Window_DragClick { get; }
         CornerRadius WindowCornerRadius { get; }

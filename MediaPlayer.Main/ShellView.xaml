@@ -7,6 +7,8 @@
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:local="clr-namespace:MediaPlayer"
         xmlns:viewModel="clr-namespace:MediaPlayer"
+        xmlns:progress="clr-namespace:MediaPlayer.CustomProgressBar;assembly=MediaPlayer.CustomProgressBar"
+        xmlns:spinner="clr-namespace:MediaPlayer.LoadingSpinnerControl;assembly=MediaPlayer.LoadingSpinnerControl"
         mc:Ignorable="d"
         AllowsTransparency="True"
         ResizeMode="NoResize"
@@ -316,15 +318,9 @@
 
             <!-- Media Element -->
             <Grid Grid.Row="2" Background="{StaticResource DarkBackgroundBrush}">
-                <MediaElement 
-                        Visibility="{Binding MediaVisibility}"
-                        x:Name="MediaPlayerElement"
-                        Source="{Binding MediaSource}"
-                        Stretch="{Binding AspectRatio}"
-                        Volume="{Binding MediaVolume}"
-                        LoadedBehavior="{Binding Load}"
-                />
                 
+                <ContentControl Content="{Binding MediaPlayerElement}" />
+
                 <!-- Media Background-->
                 <Image Visibility="{Binding BackgroundVisibility}" 
                          Source="{StaticResource Favicon}"  Width="70" Height="70"/>
@@ -332,33 +328,44 @@
                 <!--- Audio Spinner -->
 
                 <!-- Loading Spinner [For async request] -->
-                <!--
-                    <custom:LoadingSpinner Diameter="150" 
-                               Thickness="7"
-                               Color="{StaticResource LightDarkBlueBackgroundBrush}"
-                               IsLoading="{Binding MediaLoaded}"/>-->
             </Grid>
 
             <!-- Progress Bar -->
-            <Grid Grid.Row="3" Margin="10,15,15,10">
+            <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
+                
+                <!--- current progress -->
+                <TextBlock 
+                    Grid.Column="0" Text="{Binding TimeElasped}" 
+                    Foreground="White" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+                
+                <!--- Progressbar -->
+                <progress:CustomProgressBar 
+                    BarWidth="{Binding BarLength}"
+                    ProgressWidth="{Binding ProgressBarLength}"
+                    HorizontalAlignment="Center" 
+                    Grid.Column="1"/>
 
-                <!--- Current media  progress -->
-                <TextBlock HorizontalAlignment="Left" Grid.Column="0" Text="---:---" 
-                           FontSize="{StaticResource FontSizeSmall}"
-                           Foreground="{StaticResource ForegroundLightBrush}"/>
+                <Ellipse Width="20" 
+                         HorizontalAlignment="Left"
+                         Height="20" 
+                         Cursor="Hand"
+                         Stroke="AliceBlue"
+                         StrokeThickness="2"
+                         Margin="{Binding SliderPosition}"
+                         Fill="#67AABB"
+                         Grid.Column="1"/>
 
-                <!--- progress bar -->
-                <ProgressBar Grid.Column="1" Height="10" Width="auto"/>
-
-                <!--- Media length -->
-                <TextBlock HorizontalAlignment="Right" Grid.Column="2" Text="---:---"
-                           FontSize="{StaticResource FontSizeSmall}"
-                           Foreground="{StaticResource ForegroundLightBrush}"/>
+                <!--- time left -->
+                <TextBlock Grid.Column="2" Text="{Binding TotalMediaTime}" Foreground="White" 
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
             </Grid>
 
             <!-- Playback and Audio Controls -->
