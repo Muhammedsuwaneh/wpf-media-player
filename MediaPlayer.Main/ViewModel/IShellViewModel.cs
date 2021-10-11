@@ -24,15 +24,19 @@ namespace MediaPlayer
         ICommand OpenFile_Click { get; }
         ICommand PlayCommand { get; }
         ICommand PlayRecentCommand { get; }
+        Visibility SliderVisibility { get; set; }
         double ProgressBarLength { get; set; }
         bool RecentIsNotEmpty { get; set; }
         ObservableCollection<IShellViewModel> RecentMediaFiles { get; set; }
         Thickness SliderPosition { get; set; }
         ICommand StopCommand { get; }
+        ICommand ForwardCommand { get; }
+        ICommand RewindCommand { get; }
         string TimeElasped { get; set; }
         string TotalMediaTime { get; set; }
         ObservableCollection<VolumeControl> VolumeControlHeights { get; set; }
         ICommand Window_DragClick { get; }
+
         CornerRadius WindowCornerRadius { get; }
         int WindowRadius { get; set; }
 

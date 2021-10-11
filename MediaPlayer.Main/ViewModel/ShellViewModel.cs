@@ -13,6 +13,7 @@ using MediaPlayer.CustomProgressBar;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using System.Runtime.InteropServices;
 
 namespace MediaPlayer
 {
@@ -41,6 +42,15 @@ namespace MediaPlayer
             ".mkv",
         };
 
+        /// <summary>
+        /// Handles the current sliders position on the x-axis
+        /// </summary>
+        private double SliderPositionX { get; set; }
+
+        /// <summary>
+        /// Handles the sliders current position in the y axis
+        /// </summary>
+        private double SliderPositionY { get; set; }
 
         /// <summary>
         /// current media time 
@@ -60,7 +70,7 @@ namespace MediaPlayer
         /// <summary>
         /// Media Element to load media files
         /// </summary>
-        private MediaElement _MediaPlayerElement { get; set; }
+        private MediaElement _MediaPlayerElement { get; set; } = new MediaElement();
 
         public MediaElement MediaPlayerElement
         {
@@ -161,6 +171,23 @@ namespace MediaPlayer
                 {
                     _BackgroundVisibility = value;
                     OnPropertyChanged("BackgroundVisibility");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Progress slider visibility 
+        /// </summary>
+        private Visibility _SliderVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility SliderVisibility
+        {
+            get { return _SliderVisibility; }
+            set
+            {
+                if(_SliderVisibility != value)
+                {
+                    _SliderVisibility = value;
+                    OnPropertyChanged("SliderVisibility");
                 }
             }
         }
@@ -433,9 +460,6 @@ namespace MediaPlayer
             // set slider position - to be updated once media is played or user manually slides it 
             _SliderPosition = new Thickness(-1, 0, 0, 0);
 
-            // set media element instance 
-            _MediaPlayerElement = new MediaElement();
-
             // set media element default aspect ratio
             _MediaPlayerElement.Stretch = Stretch.Uniform;
 
@@ -464,7 +488,10 @@ namespace MediaPlayer
                 CurrentTimeSpan = _MediaPlayerElement.Position.TotalSeconds;
                 TotalTimeSpan = _MediaPlayerElement.NaturalDuration.TimeSpan.TotalSeconds;
 
+                // compute time elasped 
                 TimeSpan elasped = TimeSpan.FromSeconds(CurrentTimeSpan);
+
+                // compute total time 
                 TimeSpan total = TimeSpan.FromSeconds(TotalTimeSpan);
 
                 // set time elasped format
@@ -474,7 +501,7 @@ namespace MediaPlayer
                 _TotalMediaTime = FormatTime(total);
 
                 // get current progress
-                MediaProgress = (double)(CurrentTimeSpan / TotalTimeSpan) * GetBarLength();
+                MediaProgress = CalculateTimeSpan();
 
                 // update slider position
                 if (CurrentTimeSpan >= TotalTimeSpan)
@@ -581,18 +608,19 @@ namespace MediaPlayer
             }
         }
 
-        private ICommand _PlayRecentCommand { get; set; }
 
         /// <summary>
         /// Plays the recent media 
         /// </summary>
+        private ICommand _PlayRecentCommand { get; set; }
+
         public ICommand PlayRecentCommand
         {
             get
             {
                 return _PlayRecentCommand ?? (_PlayRecentCommand = new RelayCommand<object>(x =>
                 {
-                    LoadMedia();
+                   LoadMedia();
                 }));
             }
         }
@@ -803,7 +831,79 @@ namespace MediaPlayer
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Rewinds a media 5s 
+        /// </summary>
+        private ICommand _RewindCommand { get; set; }
+        public ICommand RewindCommand
+        {
+            get
+            {
+                return _RewindCommand ?? (_RewindCommand = new RelayCommand<object>(x =>
+                {
+                    // only rewind if a media is available 
+                    if (_MediaPlayerElement.IsLoaded && _MediaPlayerElement.Source != null)
+                    {
+                        // update progress 
+                        CurrentTimeSpan -= 5;
+
+                        if (CurrentTimeSpan <= 0) CurrentTimeSpan = 0;
+
+                        // compute time span for progress bar 
+                        MediaProgress = CalculateTimeSpan();
+
+                        _ProgressBarLength = MediaProgress;
+
+                        // update slider position
+                        _SliderPosition = new Thickness(MediaProgress, 0, 0, 0);
+
+                        // update media's progress
+                        _MediaPlayerElement.Position = TimeSpan.FromSeconds(CurrentTimeSpan);
+                    }
+
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Skips a media 5s forward 
+        /// </summary>
+        private ICommand _ForwardCommand { get; set; }
+        public ICommand ForwardCommand
+        {
+            get
+            {
+                return _ForwardCommand ?? (_ForwardCommand = new RelayCommand<object>(x =>
+                {
+                    // only rewind if a media is available 
+                    if(_MediaPlayerElement.IsLoaded && _MediaPlayerElement.Source != null) 
+                    {
+                        // update progress 
+                        CurrentTimeSpan += 5;
+
+                        // avoid proceesing if current media equals total time span 
+                        if (CurrentTimeSpan >= TotalTimeSpan)
+                        {
+                            StopMedia();
+                            return;
+                        }
+
+                        // compute time span for progress bar 
+                        MediaProgress = CalculateTimeSpan(); 
+
+                        _ProgressBarLength = MediaProgress;
+
+                        // update slider position
+                        _SliderPosition = new Thickness(MediaProgress,0,0,0);
+
+                        // update media's progress
+                        _MediaPlayerElement.Position = TimeSpan.FromSeconds(CurrentTimeSpan);
+                    }
+                }));
+            }
+        }
+
+    #endregion
 
 
         #region Helpers 
@@ -862,7 +962,7 @@ namespace MediaPlayer
         /// </summary>
         private void StopMedia()
         {
-            if (_MediaPlayerElement.IsLoaded && MediaIsPlaying)
+            if (_MediaPlayerElement.IsLoaded && _MediaPlayerElement.Source != null)
             {
                 ResetMedia();
 
@@ -881,6 +981,9 @@ namespace MediaPlayer
                 // update progress bar 
                 _ProgressBarLength = .0;
                 _SliderPosition = new Thickness(0, 0, 0, 0);
+
+                // hide slider 
+                _SliderVisibility = Visibility.Collapsed;
             }
         }
 
@@ -922,6 +1025,15 @@ namespace MediaPlayer
         }
 
         /// <summary>
+        /// Calculates the time span 
+        /// </summary>
+        /// <returns></returns>
+        private double CalculateTimeSpan()
+        {
+            return (double)(CurrentTimeSpan / TotalTimeSpan) * GetBarLength();
+        }
+
+        /// <summary>
         /// Loads the media and switches the media view 
         /// </summary>
         public void LoadMedia()
@@ -947,6 +1059,9 @@ namespace MediaPlayer
             _CurrentPlaybackIcon = ConvertImagePath("Pause.png");
 
             _CurrentPlaybackState = "_Pause";
+
+            // show progress slider 
+            _SliderVisibility = Visibility.Visible;
         }
 
         /// <summary>

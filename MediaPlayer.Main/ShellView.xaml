@@ -263,10 +263,12 @@
                         <MenuItem Header="_Prev" 
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource PrevIcon}"/>
-                        <MenuItem Header="_Skip Forward" 
+                        <MenuItem Header="_Forward" 
                                   Template="{StaticResource SubMenu}"
+                                  Command="{Binding ForwardCommand}"
                                   Icon="{StaticResource ForwardIcon}"/>
                         <MenuItem Header="_Rewind" 
+                                  Command="{Binding RewindCommand}"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource BackwardIcon}"/>
                     </MenuItem>
@@ -353,14 +355,16 @@
                     Grid.Column="1"/>
 
                 <Ellipse Width="20" 
+                         Grid.Column="1"
                          HorizontalAlignment="Left"
                          Height="20" 
                          Cursor="Hand"
+                         Visibility="{Binding SliderVisibility}"
                          Stroke="AliceBlue"
                          StrokeThickness="2"
                          Margin="{Binding SliderPosition}"
-                         Fill="#67AABB"
-                         Grid.Column="1"/>
+                         Fill="#67AABB">
+                </Ellipse>
 
                 <!--- time left -->
                 <TextBlock Grid.Column="2" Text="{Binding TotalMediaTime}" Foreground="White" 
@@ -396,7 +400,8 @@
                     <Button Style="{StaticResource PlayBackSectionButtons}">
                         <Image Source="{StaticResource PrevIcon}" />
                     </Button>
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                    <Button Style="{StaticResource PlayBackSectionButtons}"
+                            Command="{Binding RewindCommand}">
                         <Image Source="{StaticResource BackwardIcon}" />
                     </Button>
                     <Button 
@@ -404,7 +409,8 @@
                         Style="{StaticResource PlayButtonControl}">
                         <Image Source="{Binding CurrentPlaybackIcon}" />
                     </Button>
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                    <Button Style="{StaticResource PlayBackSectionButtons}"
+                            Command="{Binding ForwardCommand}">
                         <Image Source="{StaticResource ForwardIcon}" />
                     </Button>
                     <Button Style="{StaticResource PlayBackSectionButtons}">
