@@ -9,9 +9,6 @@ namespace MediaPlayer
 {
     public static class ViewsFactory
     {
-        public static IShellViewModel GetShellViewModelInstance(string path)
-        {
-            return new ShellViewModel(path);
-        }
+       
     }
 }

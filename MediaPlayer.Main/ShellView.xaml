@@ -9,6 +9,7 @@
         xmlns:viewModel="clr-namespace:MediaPlayer"
         xmlns:progress="clr-namespace:MediaPlayer.CustomProgressBar;assembly=MediaPlayer.CustomProgressBar"
         xmlns:spinner="clr-namespace:MediaPlayer.LoadingSpinnerControl;assembly=MediaPlayer.LoadingSpinnerControl"
+        xmlns:spinningvinyl="clr-namespace:MediaPlayer.Vinyl;assembly=MediaPlayer.Vinyl"
         mc:Ignorable="d"
         AllowsTransparency="True"
         ResizeMode="NoResize"
@@ -218,26 +219,6 @@
                                   InputGestureText=">"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource RecentIcon}">
-                            <ListView
-                                ItemsSource="{Binding RecentMediaFiles}">
-                                <ListView.Resources>
-                                    <Style TargetType="ListView">
-
-                                        <Setter Property="Margin" Value="0,0,0,0"/>
-                                        <Setter Property="Padding" Value="0,0,0,0" />
-                                        <Setter Property="Background" Value="{StaticResource LightDarkBlueBackgroundBrush}" />
-                                    </Style>
-                                </ListView.Resources>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type local:ShellViewModel}">
-                                        <MenuItem Header="{Binding MediaUrlToBeStored}" 
-                                                      Command="{Binding PlayRecentCommand}"
-                                                      Template="{StaticResource SubMenu}"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                            <MenuItem Header="Clear" 
-                                      Template="{StaticResource SubMenu}"/>
                         </MenuItem>
                         <MenuItem Header="_Exit" 
                                   InputGestureText="Ctrl+Q"
@@ -327,7 +308,11 @@
                 <Image Visibility="{Binding BackgroundVisibility}" 
                          Source="{StaticResource Favicon}"  Width="70" Height="70"/>
 
-                <!--- Audio Spinner -->
+                <!--- Vinyl -->
+                <spinningvinyl:Vinyl 
+                    OuterVinylStroke="#333"
+                    OuterVinylFill="{StaticResource BackgroundLightBlueBrush}"
+                    Visibility="{Binding VinylVisibility}"/>
 
                 <!-- Loading Spinner [For async request] -->
             </Grid>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using System;
+using Microsoft.Win32;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
@@ -6,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Reflection;
-using System;
 using System.Windows.Media;
 using Autofac;
 using MediaPlayer.CustomProgressBar;
@@ -20,14 +20,9 @@ namespace MediaPlayer
     /// <summary>
     /// Main window view model
     /// </summary>
-    public class ShellViewModel : ObservableObject, IShellViewModel
+    public class ShellViewModel : ObservableObject
     {
         #region Private Properties
-
-        /// <summary>
-        /// File where recent media is stored 
-        /// </summary>
-        private string RecentMediaFileName { get; set; } = @"Recent.dat";
 
         /// <summary>
         /// Supported media 
@@ -41,16 +36,6 @@ namespace MediaPlayer
             ".ts",
             ".mkv",
         };
-
-        /// <summary>
-        /// Handles the current sliders position on the x-axis
-        /// </summary>
-        private double SliderPositionX { get; set; }
-
-        /// <summary>
-        /// Handles the sliders current position in the y axis
-        /// </summary>
-        private double SliderPositionY { get; set; }
 
         /// <summary>
         /// current media time 
@@ -184,7 +169,7 @@ namespace MediaPlayer
             get { return _SliderVisibility; }
             set
             {
-                if(_SliderVisibility != value)
+                if (_SliderVisibility != value)
                 {
                     _SliderVisibility = value;
                     OnPropertyChanged("SliderVisibility");
@@ -253,31 +238,6 @@ namespace MediaPlayer
 
         private bool MediaIsPlaying { get; set; } = false;
 
-        /// <summary>
-        /// Recently played media files property 
-        /// </summary>
-        //private ObservableCollection<MediaFile> _RecentMediaFiles { get; set; }
-        private ObservableCollection<IShellViewModel> _RecentMediaFiles { get; set; }
-
-        /// <summary>
-        /// Recently played media to be bound 
-        /// </summary>
-        public ObservableCollection<IShellViewModel> RecentMediaFiles
-        {
-            get
-            {
-                return _RecentMediaFiles;
-            }
-
-            set
-            {
-                if (_RecentMediaFiles != value)
-                {
-                    _RecentMediaFiles = value;
-                    OnPropertyChanged("RecentMediaFiles");
-                }
-            }
-        }
 
         /// <summary>
         /// Media Volume Control Collection
@@ -304,24 +264,6 @@ namespace MediaPlayer
         /// Color for volume bar background
         /// </summary>
         SolidColorBrush VolumeBarColor = (SolidColorBrush)new BrushConverter().ConvertFromString("#0DCCFE");
-
-        /// <summary>
-        /// Indicates if recently played media is empty 
-        /// </summary>
-        private bool _RecentIsNotEmpty { get; set; } = false;
-
-        public bool RecentIsNotEmpty
-        {
-            get { return _RecentIsNotEmpty; }
-            set
-            {
-                if (_RecentIsNotEmpty != value)
-                {
-                    _RecentIsNotEmpty = value;
-                    OnPropertyChanged("RecentIsNotEmpty");
-                }
-            }
-        }
 
         #endregion
 
@@ -357,6 +299,23 @@ namespace MediaPlayer
                 {
                     _CurrentPlaybackIcon = value;
                     OnPropertyChanged("CurrentPlaybackIcon");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Vinyl Visibility for audio files
+        /// </summary>
+        private Visibility _VinylVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility VinylVisibility
+        {
+            get { return _VinylVisibility; }
+            set
+            {
+                if(_VinylVisibility != value)
+                {
+                    _VinylVisibility = value;
+                    OnPropertyChanged("VinylVisibility");
                 }
             }
         }
@@ -409,18 +368,6 @@ namespace MediaPlayer
             InitWindow();
         }
 
-        public ShellViewModel(string filePath)
-        {
-            MediaUrlToBeStored = filePath;
-        }
-
-        public void WindowsInstance(Window window)
-        {
-            _window = window;
-
-            InitWindow();
-        }
-
         /// <summary>
         /// Initilaizes window properties 
         /// </summary>
@@ -448,9 +395,6 @@ namespace MediaPlayer
 
             currentVolumePosition = 3;
 
-            // reload recently played media files to menu item list 
-            ReloadRecentlyPlayed();
-
             // set default playback play icon to play 
             _CurrentPlaybackIcon = ConvertImagePath("Play.png");
 
@@ -464,7 +408,7 @@ namespace MediaPlayer
             _MediaPlayerElement.Stretch = Stretch.Uniform;
 
             // set default media volume
-            _MediaPlayerElement.Volume = 30;
+            _MediaPlayerElement.Volume = 60;
 
             // start time dispatcher
             DispatcherTimer Timer = new DispatcherTimer();
@@ -599,28 +543,8 @@ namespace MediaPlayer
                     {
                         // Loads media 
                         LoadMedia();
-
-                        // Reloads the recently played media 
-                        ReloadRecentlyPlayed();
                     }
 
-                }));
-            }
-        }
-
-
-        /// <summary>
-        /// Plays the recent media 
-        /// </summary>
-        private ICommand _PlayRecentCommand { get; set; }
-
-        public ICommand PlayRecentCommand
-        {
-            get
-            {
-                return _PlayRecentCommand ?? (_PlayRecentCommand = new RelayCommand<object>(x =>
-                {
-                   LoadMedia();
                 }));
             }
         }
@@ -652,7 +576,7 @@ namespace MediaPlayer
                         currentVolumePosition++;
 
                         // increase media volume 
-                        _MediaPlayerElement.Volume += 10;
+                        _MediaPlayerElement.Volume += 20;
                     }
 
                     else
@@ -697,7 +621,7 @@ namespace MediaPlayer
                         currentVolumePosition--;
 
                         // reduce actual media volume 
-                        _MediaPlayerElement.Volume -= 10;
+                        _MediaPlayerElement.Volume -= 20;
                     }
 
                     else
@@ -876,7 +800,7 @@ namespace MediaPlayer
                 return _ForwardCommand ?? (_ForwardCommand = new RelayCommand<object>(x =>
                 {
                     // only rewind if a media is available 
-                    if(_MediaPlayerElement.IsLoaded && _MediaPlayerElement.Source != null) 
+                    if (_MediaPlayerElement.IsLoaded && _MediaPlayerElement.Source != null)
                     {
                         // update progress 
                         CurrentTimeSpan += 5;
@@ -889,12 +813,12 @@ namespace MediaPlayer
                         }
 
                         // compute time span for progress bar 
-                        MediaProgress = CalculateTimeSpan(); 
+                        MediaProgress = CalculateTimeSpan();
 
                         _ProgressBarLength = MediaProgress;
 
                         // update slider position
-                        _SliderPosition = new Thickness(MediaProgress,0,0,0);
+                        _SliderPosition = new Thickness(MediaProgress, 0, 0, 0);
 
                         // update media's progress
                         _MediaPlayerElement.Position = TimeSpan.FromSeconds(CurrentTimeSpan);
@@ -903,7 +827,7 @@ namespace MediaPlayer
             }
         }
 
-    #endregion
+        #endregion
 
 
         #region Helpers 
@@ -968,6 +892,9 @@ namespace MediaPlayer
 
                 // show media background 
                 _BackgroundVisibility = Visibility.Visible;
+
+                // hide vinyl
+                _VinylVisibility = Visibility.Collapsed;
 
                 // update playback icon 
                 _CurrentPlaybackIcon = ConvertImagePath("Play.png");
@@ -1040,19 +967,27 @@ namespace MediaPlayer
         {
             _MediaPlayerElement.Source = new Uri(MediaUrlToBeStored);
 
-            // Save current media to recently saved
-            DataAccessFactory.GetDataAccessInstance().WriteToFile(RecentMediaFileName, MediaUrlToBeStored);
-
-            // display media 
-            if (_MediaPlayerElement.Visibility != Visibility.Visible)
-                _MediaPlayerElement.Visibility = Visibility.Visible;
-
-            // play current media 
-            _MediaPlayerElement.LoadedBehavior = MediaState.Play;
-
             // hide background 
             if (_BackgroundVisibility != Visibility.Collapsed)
                 _BackgroundVisibility = Visibility.Collapsed;
+
+            // check if current media is an audio 
+            if (Path.GetExtension(MediaUrlToBeStored) == ".mp3")
+            {
+                _VinylVisibility = Visibility.Visible;
+                _MediaPlayerElement.Visibility = Visibility.Collapsed;
+            }
+
+            // display media - non audio medias 
+            if (_MediaPlayerElement.Visibility != Visibility.Visible && 
+                (Path.GetExtension(MediaUrlToBeStored) != ".mp3"))
+            {
+                _VinylVisibility = Visibility.Collapsed;
+                _MediaPlayerElement.Visibility = Visibility.Visible;
+            }
+
+            // play current media 
+            _MediaPlayerElement.LoadedBehavior = MediaState.Play;
 
             MediaIsPlaying = true;
 
@@ -1073,19 +1008,6 @@ namespace MediaPlayer
         {
             return string.Format("{0:D2}:{1:D2}:{2:D2}",
                     time.Hours, time.Minutes, time.Seconds);
-        }
-
-
-        /// <summary>
-        /// Loads the recently with file path data 
-        /// </summary>
-        private void ReloadRecentlyPlayed()
-        {
-            /// Get the recent data 
-            _RecentMediaFiles = DataAccessFactory.GetDataAccessInstance().ReadFromFile(RecentMediaFileName, _window);
-
-            // check if recent data is empty 
-            _RecentIsNotEmpty = _RecentMediaFiles.Count > 0;
         }
 
         /// <summary>
