@@ -71,6 +71,54 @@ namespace MediaPlayer
         }
 
         /// <summary>
+        /// Hides/displays the media player logo 
+        /// </summary>
+        private Visibility _LogoVisibility { get; set; } = Visibility.Visible;
+        public Visibility LogoVisibility
+        {
+            get { return _LogoVisibility; }
+            set
+            {
+                if(_LogoVisibility != value)
+                {
+                    _LogoVisibility = value;
+                    OnPropertyChanged("LogoVisibility");
+                }
+            }
+        }
+
+        /// <summary>
+        /// hides/displays media file name on titlebar  
+        /// </summary>
+        private Visibility _MediaFileNameVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility MediaFileNameVisibility
+        {
+            get { return _MediaFileNameVisibility; }
+            set
+            {
+                if(_MediaFileNameVisibility != value)
+                {
+                    _MediaFileNameVisibility = value;
+                    OnPropertyChanged("MediaFileNameVisibility");
+                }
+            }
+        }
+
+        private string _MediaFileName { get; set; }
+        public string MediaFileName
+        {
+            get { return _MediaFileName; }
+            set
+            {
+                if(_MediaFileName != value)
+                {
+                    _MediaFileName = value;
+                    OnPropertyChanged("MediaFileName");
+                }
+            }
+        }
+
+        /// <summary>
         /// Progress Bar Length
         /// </summary>
         private double _BarLength { get; set; }
@@ -423,6 +471,12 @@ namespace MediaPlayer
             Timer.Start();
         }
 
+        /// <summary>
+        /// Time ticker - updates the media player every second 
+        /// if media player is on play mode 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Timer_Tick(object sender, EventArgs e)
         {
             // only update progress once media is loaded and playing
@@ -594,6 +648,9 @@ namespace MediaPlayer
             }
         }
 
+        /// <summary>
+        /// Decrease volume command 
+        /// </summary>
         private ICommand _DecreaseVolume { get; set; }
         public ICommand DecreaseVolume
         {
@@ -718,6 +775,8 @@ namespace MediaPlayer
 
                             // current playback menu label 
                             _CurrentPlaybackState = "_Play";
+
+                            // Pause Vinyl animation 
                         }
 
                         else
@@ -732,6 +791,8 @@ namespace MediaPlayer
 
                             // update current playback menu label 
                             _CurrentPlaybackState = "_Pause";
+
+                            // Play Vinyl animation 
                         }
                     }
 
@@ -863,7 +924,11 @@ namespace MediaPlayer
 
                 else
                 {
+                    // obtain media path 
                     MediaUrlToBeStored = fileName;
+
+                    // obtain media filename from path
+                    _MediaFileName = Path.GetFileName(fileName);
                     return true;
                 }
             }
@@ -911,6 +976,12 @@ namespace MediaPlayer
 
                 // hide slider 
                 _SliderVisibility = Visibility.Collapsed;
+
+                // hide media file name on title bar 
+                _MediaFileNameVisibility = Visibility.Collapsed;
+
+                // show title bar logo
+                _LogoVisibility = Visibility.Visible;
             }
         }
 
@@ -994,6 +1065,12 @@ namespace MediaPlayer
             _CurrentPlaybackIcon = ConvertImagePath("Pause.png");
 
             _CurrentPlaybackState = "_Pause";
+
+            // show media file name on title bar 
+            _MediaFileNameVisibility = Visibility.Visible;
+
+            // hide title bar logo
+            _LogoVisibility = Visibility.Collapsed;
 
             // show progress slider 
             _SliderVisibility = Visibility.Visible;

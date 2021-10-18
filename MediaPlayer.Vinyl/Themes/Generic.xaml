@@ -24,27 +24,31 @@
                                 <Binding Path="OuterVinylStrokeThickness" RelativeSource="{RelativeSource TemplatedParent}" />
                             </MultiBinding>
                         </Ellipse.StrokeDashArray>
-                        
+
                         <!--- set rotation angle -->
                         <Ellipse.RenderTransform>
                             <RotateTransform x:Name="Rotation" Angle="0"/>
                         </Ellipse.RenderTransform>
-                        
+
                         <!--- Ellipse rotation animation -->
                         <Ellipse.Triggers>
+                            <!--- Event when storyboard is loaded -->
                             <EventTrigger RoutedEvent="Loaded">
-                                <BeginStoryboard>
+                                <BeginStoryboard Name="VinylStoryBoard">
                                     <Storyboard RepeatBehavior="Forever">
                                         <DoubleAnimation Storyboard.TargetName="Rotation"
                                                          Storyboard.TargetProperty="Angle"
                                                          From="0" To="360"
-                                                         SpeedRatio="0.5"
-                                                         />
+                                                         SpeedRatio="0.5" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
+
+                            <!--<EventTrigger RoutedEvent="">
+                                <PauseStoryboard BeginStoryboardName="VinylStoryBoard"/>
+                            </EventTrigger>-->
+                            
                         </Ellipse.Triggers>
-                        
                     </Ellipse>
                 </ControlTemplate>
             </Setter.Value>

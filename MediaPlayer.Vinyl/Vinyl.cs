@@ -90,10 +90,7 @@ namespace MediaPlayer.Vinyl
         public static readonly DependencyProperty DiameterProperty =
             DependencyProperty.Register("Diameter", typeof(double), typeof(Vinyl), new PropertyMetadata(100.0));
 
-
         #endregion
-
-
 
         static Vinyl()
         {

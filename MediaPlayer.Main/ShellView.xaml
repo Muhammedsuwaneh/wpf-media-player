@@ -113,9 +113,9 @@
             <Grid Grid.Row="0" Margin="20,15,0,0">
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="250" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="170" />
                 </Grid.ColumnDefinitions>
@@ -126,17 +126,26 @@
                 </Grid.RowDefinitions>
 
                 <!--- Logo -->
-                <Border Grid.Column="0" Width="150" Height="50" HorizontalAlignment="Left">
-                    <Border.Background>
-                        <ImageBrush Stretch="Uniform" ImageSource="{StaticResource LogoIcon}" />
-                    </Border.Background>
+                <StackPanel Grid.Column="0" 
+                            Height="50"
+                            Margin="10,0,0,0"
+                            HorizontalAlignment="Left"
+                            Orientation="Horizontal">
+                    <Image Source="{StaticResource LogoIcon}" 
+                           Width="150"
+                           Visibility="{Binding LogoVisibility}"/>
+                    <TextBlock Text="{Binding MediaFileName}" 
+                               Foreground="White"
+                               FontSize="{StaticResource FontSizeSmall}"
+                               Visibility="{Binding MediaFileNameVisibility}"
+                               VerticalAlignment="Center"/>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                             <command:EventToCommand Command="{Binding Window_DragClick}"
                                                     PassEventArgsToCommand="True"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </Border>
+                </StackPanel>
 
                 <!--- Empty draggable border-->
                 <Border Grid.Column="1">
@@ -310,8 +319,8 @@
 
                 <!--- Vinyl -->
                 <spinningvinyl:Vinyl 
-                    OuterVinylStroke="#333"
-                    OuterVinylFill="{StaticResource BackgroundLightBlueBrush}"
+                    OuterVinylStroke="#3545"
+                    OuterVinylFill="#eee"
                     Visibility="{Binding VinylVisibility}"/>
 
                 <!-- Loading Spinner [For async request] -->
