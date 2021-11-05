@@ -9,21 +9,25 @@ The media player supports the following media file types: .mp3, .mpg, .mpeg, .mp
 
 ## Prerequisites
 
-The application only runs a windows operating system. It can run on Windows systems ranging from 
+The application only runs on a windows operating system. It can run on Windows systems ranging from 
 Win7 - Win11. 
 
 ## App Features
 
-### Audio Player
-### Video Player
-### Playlist
-### Media file dialogs
-### Recently played 
-### Playback control buttons
-### Audio controls
-### Helper buttons
-### Keyboard shortcuts
-### Media progress & progress sliders
+- Audio Player
+- Video Player
+- Playlist
+- Media file dialogs
+- Recently played 
+- Playback control buttons
+- Audio controls
+- Helper buttons
+- Keyboard shortcuts
+- Media progress & progress sliders
+- Error Dialog
+- Warning Dialog
+- Helper Dialog
+- About Dialog
 
 ## Technologies/Dependencies used
 
@@ -48,33 +52,33 @@ Win7 - Win11.
 
 ### Media: 
 
-### Ctrl+O : Opens a fiel dialog 
-### Ctrl+Shift+O : Opens a multiple file dialog
-### Ctrl+Q : Close Window
+- Ctrl+O : Opens a fiel dialog 
+- Ctrl+Shift+O : Opens a multiple file dialog
+- Ctrl+Q : Close Window
 
 ### Playback: 
 
-### Space : Pauses/Plays media 
-### Ctrl+S : Stops media 
-### Left Arrow : Rewinds media
-### Right Arrow : Forwards media
-### Ctrl+N : Plays next media file
-### Ctrl+P : Plays previous media file
+- Space : Pauses/Plays media 
+- Ctrl+S : Stops media 
+- Left Arrow : Rewinds media
+- Right Arrow : Forwards media
+- Ctrl+N : Plays next media file
+- Ctrl+P : Plays previous media file
 
 ### Audio: 
 
-### Up Arrow : Increase volume
-### Down Arrow : Decreases volume 
-### M : Mutes media 
+- Up Arrow : Increase volume
+- Down Arrow : Decreases volume 
+- M : Mutes media 
 
 ### Video 
 
-### F11 : Fullscreen mode
+- F11 : Fullscreen mode
 
 ### Help
 
-### Ctrl+H : Display help window
-### Alt+A : Display about window 
+- Ctrl+H : Display help window
+- Alt+A : Display about window 
 
 ## Screenshots
 
