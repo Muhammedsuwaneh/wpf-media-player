@@ -10,46 +10,46 @@
                     <ControlTemplate.Resources>
                         <converters:StrokeDashArrayConverter x:Key="StrokeDashArrayConverter"/>
                     </ControlTemplate.Resources>
-                    <Ellipse Height="{TemplateBinding OuterVinylHeight}" 
-                             Width="{TemplateBinding OuterVinylWidth}"
-                             Stroke="{TemplateBinding OuterVinylStroke}"
+                    <Ellipse Height="{TemplateBinding VinylHeight}" 
+                             Width="{TemplateBinding VinylWidth}"
+                             Stroke="{TemplateBinding VinylStroke}"
                              RenderTransformOrigin="0.5 0.5"
-                             Fill="{TemplateBinding OuterVinylFill}"
-                             StrokeThickness="{TemplateBinding OuterVinylStrokeThickness}">
+                             Fill="{TemplateBinding VinylFill}"
+                             StrokeThickness="{TemplateBinding VinylStrokeThickness}">
 
-                        <!--- Ellipse's Stroke Dash Array  -->
-                        <Ellipse.StrokeDashArray>
-                            <MultiBinding Converter="{StaticResource StrokeDashArrayConverter}">
-                                <Binding Path="Diameter" RelativeSource="{RelativeSource TemplatedParent}" />
-                                <Binding Path="OuterVinylStrokeThickness" RelativeSource="{RelativeSource TemplatedParent}" />
-                            </MultiBinding>
-                        </Ellipse.StrokeDashArray>
+                            <!--- Ellipse's Stroke Dash Array  -->
+                            <Ellipse.StrokeDashArray>
+                                <MultiBinding Converter="{StaticResource StrokeDashArrayConverter}">
+                                    <Binding Path="Diameter" RelativeSource="{RelativeSource TemplatedParent}" />
+                                    <Binding Path="VinylStrokeThickness" RelativeSource="{RelativeSource TemplatedParent}" />
+                                </MultiBinding>
+                            </Ellipse.StrokeDashArray>
 
-                        <!--- set rotation angle -->
-                        <Ellipse.RenderTransform>
-                            <RotateTransform x:Name="Rotation" Angle="0"/>
-                        </Ellipse.RenderTransform>
+                            <!--- set rotation angle -->
+                            <Ellipse.RenderTransform>
+                                <RotateTransform x:Name="Rotation" Angle="0"/>
+                            </Ellipse.RenderTransform>
 
-                        <!--- Ellipse rotation animation -->
-                        <Ellipse.Triggers>
-                            <!--- Event when storyboard is loaded -->
-                            <EventTrigger RoutedEvent="Loaded">
-                                <BeginStoryboard Name="VinylStoryBoard">
-                                    <Storyboard RepeatBehavior="Forever">
-                                        <DoubleAnimation Storyboard.TargetName="Rotation"
+                            <!--- Ellipse rotation animation -->
+                            <Ellipse.Triggers>
+                                <!--- Event when storyboard is loaded -->
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever" Name="PART_VinylStoryBoard">
+                                            <DoubleAnimation Storyboard.TargetName="Rotation"
                                                          Storyboard.TargetProperty="Angle"
                                                          From="0" To="360"
                                                          SpeedRatio="0.5" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
 
-                            <!--<EventTrigger RoutedEvent="">
-                                <PauseStoryboard BeginStoryboardName="VinylStoryBoard"/>
-                            </EventTrigger>-->
-                            
-                        </Ellipse.Triggers>
-                    </Ellipse>
+                                <EventTrigger RoutedEvent="Button.Click">
+                                    <PauseStoryboard BeginStoryboardName="PART_VinylStoryBoard"/>
+                                </EventTrigger>
+
+                            </Ellipse.Triggers>
+                        </Ellipse>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

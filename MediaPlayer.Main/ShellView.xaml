@@ -134,11 +134,15 @@
                     <Image Source="{StaticResource LogoIcon}" 
                            Width="150"
                            Visibility="{Binding LogoVisibility}"/>
-                    <TextBlock Text="{Binding MediaFileName}" 
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding MediaFileNameVisibility, FallbackValue=Collapsed}">
+                        <Image Source="{StaticResource PlayIcon}" Width="20" Height="20"
+                               Margin="0,0,5,0"/>
+                        <TextBlock Text="{Binding MediaFileName}" 
                                Foreground="White"
                                FontSize="{StaticResource FontSizeSmall}"
-                               Visibility="{Binding MediaFileNameVisibility}"
                                VerticalAlignment="Center"/>
+                    </StackPanel>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                             <command:EventToCommand Command="{Binding Window_DragClick}"
@@ -299,8 +303,10 @@
                         <MenuItem Header="_Shortcuts" 
                                     InputGestureText="Ctrl+H"
                                   Template="{StaticResource SubMenu}"
+                                  Command="{Binding HelperWindowShell}"
                                   Icon="{StaticResource HelpIcon}"/>
                         <MenuItem Header="_About" 
+                                  Command="{Binding AboutWindowShell}"
                                   InputGestureText="Alt+A"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource HelpIcon}" />
@@ -319,8 +325,8 @@
 
                 <!--- Vinyl -->
                 <spinningvinyl:Vinyl 
-                    OuterVinylStroke="#3545"
-                    OuterVinylFill="#eee"
+                    VinylStroke="#3545"
+                    VinylFill="#eee"
                     Visibility="{Binding VinylVisibility}"/>
 
                 <!-- Loading Spinner [For async request] -->
@@ -379,7 +385,8 @@
                     <Button Style="{StaticResource PlayBackSectionButtons}">
                         <Image Source="{StaticResource PlaylistIcon}" />
                     </Button>
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
+                    <Button Style="{StaticResource PlayBackSectionButtons}"
+                            Command="{Binding HelperWindowShell}">
                         <Image Source="{StaticResource HelpIcon}" />
                     </Button>
                     <Button Style="{StaticResource PlayBackSectionButtons}">

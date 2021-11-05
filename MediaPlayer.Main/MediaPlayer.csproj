@@ -108,6 +108,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\IObservableObject.cs" />
+    <Compile Include="Dialogs\ErrorDialog.xaml.cs">
+      <DependentUpon>ErrorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\HelperDialog.xaml.cs">
+      <DependentUpon>HelperDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\WarningDialog.xaml.cs">
+      <DependentUpon>WarningDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EventHandlers\EventArgs.cs" />
     <Compile Include="EventHandlers\EventRaiser.cs" />
     <Compile Include="EventHandlers\IRelayCommand.cs" />
@@ -120,6 +129,18 @@
     <Compile Include="ValueConverters\BaseValueConverters.cs" />
     <Compile Include="Window\IWindowResizer.cs" />
     <Compile Include="Window\WindowResizer.cs" />
+    <Page Include="Dialogs\ErrorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\HelperDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\WarningDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

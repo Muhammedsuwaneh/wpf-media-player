@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Runtime.InteropServices;
+using MediaPlayer.Dialogs;
 
 namespace MediaPlayer
 {
@@ -641,7 +642,8 @@ namespace MediaPlayer
                         // set media volume to maximum 
 
                         // warn user 
-                        MessageBox.Show("Higher Volumes may damage your ears");
+                        WarningDialog errorDialog = new WarningDialog("Higher Volumes may damage your ears");
+                        errorDialog.ShowDialog();
                     }
 
                 }));
@@ -888,6 +890,38 @@ namespace MediaPlayer
             }
         }
 
+        /// <summary>
+        /// Displays the helper window
+        /// </summary>
+        private ICommand _HelperWindowShell { get; set; }
+
+        public ICommand HelperWindowShell
+        {
+            get
+            {
+                return _HelperWindowShell ?? (_HelperWindowShell = new RelayCommand<object>(x =>
+                {
+
+                    HelperDialog helper = new HelperDialog();
+                    helper.ShowDialog();
+
+                }));
+            }
+        }
+
+        private ICommand _AboutWindowShell { get; set; }
+
+        public ICommand AboutWindowShell
+        {
+            get
+            {
+                return _AboutWindowShell ?? (_AboutWindowShell = new RelayCommand<object>(x =>
+                {
+                    MessageBox.Show("Display about window");
+                }));
+            }
+        }
+
         #endregion
 
 
@@ -910,7 +944,9 @@ namespace MediaPlayer
                 if (CheckForEmptyFilePaths(fileName) == true)
                 {
                     // display error window 
-                    MessageBox.Show("No file selected");
+                    ErrorDialog errorDialog = new ErrorDialog("No file selected");
+                    errorDialog.ShowDialog();
+
                     return false;
                 }
 
@@ -918,7 +954,9 @@ namespace MediaPlayer
                 if (CheckForUnsupportedFileTypes(fileName) == false)
                 {
                     // display error window 
-                    MessageBox.Show("Selected File type is not supported");
+                    ErrorDialog errorDialog = new ErrorDialog("Selected File type is not supported");
+                    errorDialog.ShowDialog();
+
                     return false;
                 }
 
@@ -943,7 +981,20 @@ namespace MediaPlayer
         /// <returns></returns>
         private string ConvertImagePath(string imageName)
         {
-            return "pack://application:,,,/MediaPlayer;component/Assets/" + imageName.ToString();
+            string filePath = "";
+
+            try
+            {
+                filePath = "pack://application:,,,/MediaPlayer;component/Assets/" + imageName.ToString();
+            }
+            catch (Exception ex)
+            {
+
+                ErrorDialog errorDialog = new ErrorDialog(ex.Message.ToString());
+                errorDialog.ShowDialog();
+            }
+
+            return filePath;
         }
 
         /// <summary>
