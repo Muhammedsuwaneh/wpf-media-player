@@ -91,10 +91,9 @@ Win7 - Win11.
 ### Audio Mode
 ![Screenshot](Screenshots/audioMode.png)
 
-### Main Screen
 
 ## Contributors
-Muhammed Suwaneh, Venus Tech
+Muhammed Suwaneh, Eskişehir Osmangazi University, 2021
 
 ## Version 
 1.0.0
