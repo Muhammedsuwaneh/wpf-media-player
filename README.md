@@ -16,17 +16,12 @@ Win7 - Win11.
 
 - Audio Player
 - Video Player
-- Playlist
 - Media file dialogs
-- Recently played 
 - Playback control buttons
 - Audio controls
-- Helper buttons
-- Keyboard shortcuts
-- Media progress & progress sliders
+- Media progress
 - Error Dialog
 - Warning Dialog
-- Helper Dialog
 - About Dialog
 
 ## Technologies/Dependencies used
@@ -46,40 +41,6 @@ Win7 - Win11.
 - Adobe XD (Mockup Design)
 - Gitbash & Github (Version control)
 
-## User Manual 
-
-## Keyboard Shortcuts
-
-### Media: 
-
-- Ctrl+O : Opens a fiel dialog 
-- Ctrl+Shift+O : Opens a multiple file dialog
-- Ctrl+Q : Close Window
-
-### Playback: 
-
-- Space : Pauses/Plays media 
-- Ctrl+S : Stops media 
-- Left Arrow : Rewinds media
-- Right Arrow : Forwards media
-- Ctrl+N : Plays next media file
-- Ctrl+P : Plays previous media file
-
-### Audio: 
-
-- Up Arrow : Increase volume
-- Down Arrow : Decreases volume 
-- M : Mutes media 
-
-### Video 
-
-- F11 : Fullscreen mode
-
-### Help
-
-- Ctrl+H : Display help window
-- Alt+A : Display about window 
-
 ## Screenshots
 
 ### Main window 
@@ -93,11 +54,11 @@ Win7 - Win11.
 
 
 ## Contributors
-Muhammed Suwaneh, Eskişehir Osmangazi University, 2021
+Muhammed Suwaneh, Eskişehir Osmangazi University, 2022
 
 ## Version 
 1.0.0
 
 ## Licenced 
-Under [`MIT`](LICENSE) Copyright 2021  
+Under [`MIT`](LICENSE) Copyright 2022  
 

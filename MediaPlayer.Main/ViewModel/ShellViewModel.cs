@@ -909,19 +909,6 @@ namespace MediaPlayer
             }
         }
 
-        private ICommand _AboutWindowShell { get; set; }
-
-        public ICommand AboutWindowShell
-        {
-            get
-            {
-                return _AboutWindowShell ?? (_AboutWindowShell = new RelayCommand<object>(x =>
-                {
-                    MessageBox.Show("Display about window");
-                }));
-            }
-        }
-
         #endregion
 
 

@@ -219,22 +219,11 @@
                     <!-- Media -->
                     <MenuItem Header="_Media" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Open File.." 
-                                  InputGestureText="Ctrl+O"
                                   Command="{Binding OpenFile_Click}"
                                   Icon="{StaticResource FileIcon}"
                                   Template="{StaticResource SubMenu}" />
-                        <MenuItem Header="_Open Multiple Files.."
-                                  InputGestureText="Ctrl+Shift+O"
-                                  Template="{StaticResource SubMenu}"
-                                  Icon="{StaticResource MultipleFilesIcon}" />
                         <Separator Template="{StaticResource MenuSep}" />
-                        <MenuItem Header="_Recently Played"
-                                  InputGestureText=">"
-                                  Template="{StaticResource SubMenu}"
-                                  Icon="{StaticResource RecentIcon}">
-                        </MenuItem>
                         <MenuItem Header="_Exit" 
-                                  InputGestureText="Ctrl+Q"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource ExitIcon}"
                                   Command="{Binding CloseWindow_Click}"/>
@@ -251,12 +240,6 @@
                                   Command="{Binding StopCommand}"
                                   Icon="{StaticResource StopIcon}" />
                         <Separator Template="{StaticResource MenuSep}" />
-                        <MenuItem Header="_Next" 
-                                  Template="{StaticResource SubMenu}"
-                                  Icon="{StaticResource NextIcon}"/>
-                        <MenuItem Header="_Prev" 
-                                  Template="{StaticResource SubMenu}"
-                                  Icon="{StaticResource PrevIcon}"/>
                         <MenuItem Header="_Forward" 
                                   Template="{StaticResource SubMenu}"
                                   Command="{Binding ForwardCommand}"
@@ -286,28 +269,14 @@
                     <!-- Video -->
                     <MenuItem Header="_Video" Template="{StaticResource MenuTop}">
                         <MenuItem Header="_Fullscreen" 
-                                  InputGestureText="F11"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource FullscreenIcon}"/>
                     </MenuItem>
 
-                    <!--- View -->
-                    <MenuItem Header="_View" Template="{StaticResource MenuTop}">
-                        <MenuItem Header="_Playlist" 
-                                  Template="{StaticResource SubMenu}"
-                                  Icon="{StaticResource PlaylistIcon}"/>
-                    </MenuItem>
-
                     <!-- Help -->
                     <MenuItem Header="_Help" Template="{StaticResource MenuTop}">
-                        <MenuItem Header="_Shortcuts" 
-                                    InputGestureText="Ctrl+H"
-                                  Template="{StaticResource SubMenu}"
-                                  Command="{Binding HelperWindowShell}"
-                                  Icon="{StaticResource HelpIcon}"/>
                         <MenuItem Header="_About" 
-                                  Command="{Binding AboutWindowShell}"
-                                  InputGestureText="Alt+A"
+                                  Command="{Binding HelperWindowShell}"
                                   Template="{StaticResource SubMenu}"
                                   Icon="{StaticResource HelpIcon}" />
                     </MenuItem>
@@ -382,15 +351,9 @@
 
                 <!--- Info control -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
-                        <Image Source="{StaticResource PlaylistIcon}" />
-                    </Button>
                     <Button Style="{StaticResource PlayBackSectionButtons}"
                             Command="{Binding HelperWindowShell}">
                         <Image Source="{StaticResource HelpIcon}" />
-                    </Button>
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
-                        <Image Source="{StaticResource FullscreenIcon}" />
                     </Button>
                 </StackPanel>
 
@@ -398,9 +361,6 @@
                 <StackPanel Grid.Column="1" 
                             HorizontalAlignment="Center" 
                             Orientation="Horizontal">
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
-                        <Image Source="{StaticResource PrevIcon}" />
-                    </Button>
                     <Button Style="{StaticResource PlayBackSectionButtons}"
                             Command="{Binding RewindCommand}">
                         <Image Source="{StaticResource BackwardIcon}" />
@@ -413,9 +373,6 @@
                     <Button Style="{StaticResource PlayBackSectionButtons}"
                             Command="{Binding ForwardCommand}">
                         <Image Source="{StaticResource ForwardIcon}" />
-                    </Button>
-                    <Button Style="{StaticResource PlayBackSectionButtons}">
-                        <Image Source="{StaticResource NextIcon}" />
                     </Button>
                     <Button
                         Command="{Binding StopCommand}"
