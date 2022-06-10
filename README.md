@@ -22,20 +22,25 @@ The application only runs on a windows operating system. To run the source code,
 
 ## Technologies/Dependencies used
 
-- C#
-- .Net Framework
-- WPF 
-- Xaml
-- MVVM Light
-- Xunit
-- Autofac 
-- Fody Weavers 
+<div id="badges">
+  <img src="https://img.shields.io/badge/-C sharp-green" />
+  <img src="https://img.shields.io/badge/-.Net Framework-red" />
+  <img src="https://img.shields.io/badge/-WPF-blue" />
+  <img src="https://img.shields.io/badge/-Xaml-green" />
+  <img src="https://img.shields.io/badge/-MVVM Light-red" />
+  <img src="https://img.shields.io/badge/-Xunit-blue" />
+  <img src="https://img.shields.io/badge/-Autofac-white" />
+  <img src="https://img.shields.io/badge/-Fody Weavers-orange" /> 
+</div>
+
 
 ## Development & Version Control
 
-- Visual Studio (Development)
-- Adobe XD (Mockup Design)
-- Gitbash & Github (Version control)
+<div id="badges">
+  <img src="https://img.shields.io/badge/-Visual Studio (Development)-green" />
+  <img src="https://img.shields.io/badge/-Adobe XD (Mockup Design)-red" />
+  <img src="https://img.shields.io/badge/-Gitbash & Github (Version control)-blue" />
+</div>
 
 ## Screenshots
 
@@ -50,7 +55,7 @@ The application only runs on a windows operating system. To run the source code,
 
 
 ## Contributors
-Muhammed Suwaneh, Eskişehir Osmangazi University, 2022
+[Muhammed Suwaneh, Eskişehir Osmangazi University, 2022](https://github.com/Muhammedsuwaneh)
 
 ## Version 
 1.0.0
