@@ -1,4 +1,4 @@
-﻿## WPF Media Player Application
+﻿## 🎞️ WPF Media Player Application
 
 ## About 
 
@@ -18,7 +18,6 @@ The application only runs on a windows operating system. To run the source code,
   <img src="https://img.shields.io/badge/-Audio controls-red" />
   <img src="https://img.shields.io/badge/-Media progress-blue" />
   <img src="https://img.shields.io/badge/-Error & Warning Dialogs-white" />
-  <img src="https://img.shields.io/badge/-Fody Weavers-orange" /> 
 </div>
 
 ## Technologies/Dependencies used
