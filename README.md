@@ -10,15 +10,16 @@ The application only runs on a windows operating system. To run the source code,
 
 ## App Features
 
-- Audio Player
-- Video Player
-- Media file dialogs
-- Playback control buttons
-- Audio controls
-- Media progress
-- Error Dialog
-- Warning Dialog
-- About Dialog
+<div id="badges">
+  <img src="https://img.shields.io/badge/-Audio Player-green" />
+  <img src="https://img.shields.io/badge/-Video Player-red" />
+  <img src="https://img.shields.io/badge/-Media file dialogs-blue" />
+  <img src="https://img.shields.io/badge/-Playback control buttons-green" />
+  <img src="https://img.shields.io/badge/-Audio controls-red" />
+  <img src="https://img.shields.io/badge/-Media progress-blue" />
+  <img src="https://img.shields.io/badge/-Error & Warning Dialogs-white" />
+  <img src="https://img.shields.io/badge/-Fody Weavers-orange" /> 
+</div>
 
 ## Technologies/Dependencies used
 
