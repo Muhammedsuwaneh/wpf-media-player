@@ -46,7 +46,6 @@ The application only runs on a windows operating system. To run the source code,
 
 ## Screenshots
 
-### Main window 
 ![Screenshot](Screenshots/mainWindow.png)
 
 ### Video Mode
