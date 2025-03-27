@@ -1,5 +1,7 @@
 ﻿## WPF Media Player Application
 
+![Screenshot](Screenshots/mainWindow.png)
+
 ## About 
 
 The application is specifically designed to play media files. The media player supports the following media file types: .mp3, .mpg, .mpeg, .mp4, .ts, .mkv

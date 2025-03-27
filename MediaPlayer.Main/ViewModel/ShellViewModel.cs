@@ -586,7 +586,7 @@ namespace MediaPlayer
         }
 
         /// <summary>
-        /// Open and read media file 
+        /// Open and read media file
         /// </summary>
         public ICommand OpenFile_Click
         {
@@ -596,7 +596,7 @@ namespace MediaPlayer
                 {
                     if (GetMediaFile())
                     {
-                        // Loads media 
+                        // Loads media from file
                         LoadMedia();
                     }
 
@@ -819,7 +819,7 @@ namespace MediaPlayer
         }
 
         /// <summary>
-        /// Rewinds a media 5s 
+        /// Rewinds a media 5seconds
         /// </summary>
         private ICommand _RewindCommand { get; set; }
         public ICommand RewindCommand
@@ -828,7 +828,7 @@ namespace MediaPlayer
             {
                 return _RewindCommand ?? (_RewindCommand = new RelayCommand<object>(x =>
                 {
-                    // only rewind if a media is available 
+                    // only rewind if a media playing 
                     if (_MediaPlayerElement.IsLoaded && _MediaPlayerElement.Source != null)
                     {
                         // update progress 

@@ -11,7 +11,7 @@ namespace MediaPlayer
         {
             InitializeComponent();
 
-            DataContext = new ShellViewModel(this);
+            DataContext = new ShellViewModel(this); // init shell view model
         }
     }
 }

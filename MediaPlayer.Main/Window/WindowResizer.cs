@@ -13,7 +13,7 @@ namespace MediaPlayer
     public enum WindowDockPosition
     {
         /// <summary>
-        /// Not docked
+        /// Window docked 
         /// </summary>
         Undocked,
         /// <summary>
