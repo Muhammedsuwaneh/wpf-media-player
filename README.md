@@ -10,6 +10,16 @@ The application is specifically designed to play media files. The media player s
 
 The application only runs on a windows operating system. To run the source code, you need visual studio, c#, .net and wpf installed.
 
+```bash
+# Clone the repository
+git clone https://github.com/Muhammedsuwaneh/wpf-media-player
+
+# Navigate to the project folder
+cd wpf-media-player
+
+# Build and run the project in Visual Studio
+```
+
 ## App Features
 
 <div id="badges">
